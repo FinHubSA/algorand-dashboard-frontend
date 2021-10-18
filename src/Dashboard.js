@@ -47,7 +47,7 @@ export default class Dashboard extends Component {
         return (
             <div>
                 <Layout style={{ height: 920 }}>
-                    <Sider width={300} style={{backgroundColor:'#eee'}}>
+                    {/*<Sider width={300} style={{backgroundColor:'#eee'}}>
                         <Content style={{ height: 200 }}>
                             <View1 user={selectedUser}/>
                         </Content>
@@ -60,28 +60,28 @@ export default class Dashboard extends Component {
                                 changeIncludedGender={this.changeIncludedGender}
                             />
                         </Content>
-                    </Sider>
+                    </Sider>*/}
                     <Layout>
-                        <Content style={{ height: 300 }}>
+                        {/*<Content style={{ height: 300 }}>
                             <View4 user={selectedUser}/>
-                        </Content>
-                        <Layout style={{ height: 600 }}>
+                        </Content>*/}
+                        <Layout >
                             <Content>
                                 <View5 data={filteredData}/>
                             </Content>
-                            <Sider width={300} style={{backgroundColor:'#eee'}}>
+                            {/*<Sider width={300} style={{backgroundColor:'#eee'}}>
                                 <View6 data={filteredData} changeSelectUser={this.changeSelectUser}/>
-                            </Sider>
+                            </Sider>*/}
                         </Layout>
                     </Layout>
                 </Layout>
                 <Layout>
-                    <Footer style={{ height: 20 }}>
+                    {/*<Footer style={{ height: 20 }}>
                         <div style={{marginTop: -10}}>
                             Source Code <a href='https://github.com/sdq/react-d3-dashboard'>https://github.com/sdq/react-d3-dashboard</a>;
                             Author <a href='https://sdq.ai'>sdq</a>;
                         </div>
-                    </Footer>
+                    </Footer>*/}
                 </Layout>
             </div>
         )

@@ -5,9 +5,15 @@
   "dependencies": {
     "antd": "^3.23.3",
     "d3": "4.13.0",
+    "d3-plugins-sankey": "^1.2.1",
+    "d3-sankey": "^0.12.3",
+    "d3-scale": "^4.0.2",
+    "jquery": "^3.6.0",
     "lodash": "^4.17.15",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
+    "react-faux-dom": "^2.1.1",
+    "react-script-tag": "^1.1.2",
     "react-scripts": "3.1.1"
   },
   "scripts": {
