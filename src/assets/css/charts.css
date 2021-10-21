@@ -20,6 +20,10 @@ h5 {
 	padding-left: 75px;
 }
 
+.header {
+	z-index: 10;
+}
+
 .center {
 	text-align:center;
 }
@@ -28,6 +32,53 @@ h5 {
     display:flex;
     justify-content:center;
     text-align:center;
+}
+
+.links {
+	position: absolute;
+}
+
+.links line {
+    stroke: grey;
+}
+
+.node {
+    width: 20px;
+	height: 20px;
+	border-radius: 10px;
+	background-color: black;
+    position: absolute;
+	z-index: 0;
+}
+
+.central_bank {
+	background-color:#40e0d0;
+}
+
+.households {
+	background-color:#a52a2a;
+}
+
+.firms {
+	background-color:#008000;
+}
+
+.banks {
+	background-color:#ff8c00;
+}
+
+.lsps {
+	background-color: #800080;
+}
+
+.tooltip {
+    position: absolute;
+    background-color: lightgrey;
+    padding: 10px;
+}
+
+.legend{
+	cursor: pointer;
 }
 
 .clearfix:before,
