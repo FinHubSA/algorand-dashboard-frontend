@@ -1,6 +1,5 @@
 import * as d3 from 'd3';
-//import * as d3Sankey from 'd3-sankey';
-//import d3 from './d3.v3.js'
+//import {nest} from 'd3-collection';
 import '../../assets/css/charts.css';
 //import './sankey.js';
 import $ from 'jquery';
@@ -327,10 +326,10 @@ const draw = (props, data, configs) => {
             "Central Bank Digital Currency"
         ])
         .range([
-            "#17335b", 
-            "#005172", 
-            "#007c8b", 
-            "#2f89c9", 
+            "#ff8c00", 
+            "#40e0d0", 
+            "#008000", 
+            "#a52a2a", 
             "#4fc2be",
             "#9c9b9b",   
             "#9c9b9b",  
@@ -514,7 +513,6 @@ const draw = (props, data, configs) => {
         .sort(function(a, b) { return b.dy - a.dy; })
         .on('mouseover',function(d) {
             if(d.value != 0.0006){
-                            
                 var source= d.source.name.replace(/ liability| asset|/gi, "");
                 var target= d.target.name.replace(/ liability| asset|/gi, "");
             

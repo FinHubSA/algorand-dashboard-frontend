@@ -20,6 +20,10 @@ h5 {
 	padding-left: 75px;
 }
 
+.header {
+	z-index: 10;
+}
+
 .center {
 	text-align:center;
 }
@@ -29,6 +33,75 @@ h5 {
     justify-content:center;
     text-align:center;
 }
+
+.links {
+	position: absolute;
+}
+
+.links line {
+    stroke: grey;
+}
+
+.node {
+    width: 20px;
+	height: 20px;
+	border-radius: 10px;
+	background-color: black;
+    position: absolute;
+	z-index: 0;
+}
+
+.node-group{
+	width: 30px;
+	height: 30px;
+	border: 5px solid #555;
+	border-radius: 15px;
+}
+
+.node-tooltip {
+    position: absolute;
+    background-color: white;
+    max-width: 200px;
+    height: auto;
+    padding: 1px;
+    border-style: solid;
+    border-radius: 4px;
+    border-width: 1px;
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, .5);
+    pointer-events: none;
+	opacity: 0;
+}
+
+.central_bank {
+	background-color:#40e0d0;
+}
+
+.households {
+	background-color:#a52a2a;
+}
+
+.firms {
+	background-color:#008000;
+}
+
+.banks {
+	background-color:#ff8c00;
+}
+
+.lsps {
+	background-color: #800080;
+}
+
+.tooltip {
+    position: absolute;
+    background-color: lightgrey;
+    padding: 10px;
+}
+
+.legend{
+	cursor: pointer;
+}
+
 
 .clearfix:before,
 .clearfix:after,

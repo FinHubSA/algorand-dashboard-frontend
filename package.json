@@ -10,6 +10,7 @@
     "d3-scale": "^4.0.2",
     "jquery": "^3.6.0",
     "lodash": "^4.17.15",
+    "materialize-css": "^1.0.0-rc.2",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-faux-dom": "^2.1.1",
