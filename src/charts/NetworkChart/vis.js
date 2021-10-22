@@ -14,10 +14,14 @@ const draw = (props, data) => {
   const width = props.width - margin.left - margin.right;
   const height = props.height - margin.top - margin.bottom;
 
-  initialize_chart();
-  prepare_data();
-  initialize_simulation();
-  start_simulation();
+  refresh_data()
+ 
+  function refresh_data(){
+    initialize_chart();
+    prepare_data();
+    initialize_simulation();
+    start_simulation();
+  }
 
   function initialize_chart() {
     var colors = 
@@ -70,7 +74,10 @@ const draw = (props, data) => {
         .style("text-anchor", "end")
         .text(function(d) { return d; })
         .on("click", function(d){
-          group_data(group_by_account_type, d)
+          var grouped = group_data(group_by_account_type, d)
+          if (grouped){
+            refresh_data()
+          }
         })
   }
 
@@ -199,15 +206,18 @@ const draw = (props, data) => {
   function group_data(criteria, param_1) {
     var group_id = "group_"+Object.keys(groups).length;
     var group_txns = {}
+    var grouped_nodes = {}
 
     // Replace transactions sender/receiver with grouped node
     chart_data.forEach(function (txn) {
       const orignial_txn = _.cloneDeep(txn);
       if (criteria(txn, param_1)[0]){
+        grouped_nodes[txn.sender] = 1
         txn.sender = group_id
       }
 
       if (criteria(txn, param_1)[1]){
+        grouped_nodes[txn.receiver] = 1
         txn.receiver = group_id
       }
 
@@ -217,16 +227,22 @@ const draw = (props, data) => {
     
     groups[group_id] = group_txns;
 
-    console.log("group "+group_id)
-    console.log(chart_data)
+    console.log("grouped**")
+    console.log(grouped_nodes)
+    // If we grouped one node we ungroup
+    if (Object.keys(grouped_nodes).length <= 1){
+      ungroup_data(group_id)
+      return false
+    }
 
-    initialize_chart();
-    prepare_data();
-    initialize_simulation();
-    start_simulation();
+    return true;
   }
 
   function ungroup_data(group_id) {
+    if (!(group_id in groups)){
+      return false;
+    }
+
     chart_data.forEach(function (txn) {
       if (txn.sender === group_id || txn.receiver === group_id){
         var og_txn = groups[group_id][txn.id]
@@ -238,13 +254,7 @@ const draw = (props, data) => {
 
     delete groups[group_id];
 
-    //console.log("ungroup "+group_id)
-    //console.log(chart_data)
-
-    initialize_chart();
-    prepare_data();
-    initialize_simulation();
-    start_simulation();
+    return true
   }
 
   /**
@@ -365,8 +375,10 @@ const draw = (props, data) => {
           .style('left', '0px')
           .style('top', '0px');
 
-        if (d.id in groups){
-          ungroup_data(d.id);
+        
+        var ungrouped = ungroup_data(d.id);
+        if (ungrouped) {
+          refresh_data()
         }
       })
 

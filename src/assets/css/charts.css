@@ -69,6 +69,7 @@ h5 {
     border-width: 1px;
     box-shadow: 3px 3px 10px rgba(0, 0, 0, .5);
     pointer-events: none;
+	opacity: 0;
 }
 
 .central_bank {
