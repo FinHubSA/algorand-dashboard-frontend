@@ -113,7 +113,9 @@ export default class NetworkChart extends Component {
 
     render() {
         return ([
-            <div className='vis-networkchart'></div>
+            <div class="container">
+                <div className='vis-networkchart'></div>
+            </div>
         ])
     }
 }

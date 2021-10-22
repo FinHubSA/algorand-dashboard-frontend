@@ -6,7 +6,7 @@ const draw = (props, data) => {
 
   var chart_data = _.cloneDeep(data);
     
-  var simulation, nodes = [], links = [], svg, ticked, groups = {}
+  var simulation, nodes = [], links = [], svg, tooltip, ticked, groups = {}
   var linkWidthScale = d3.scaleLinear().range([1, 5]);
   var linkStrengthScale = d3.scaleLinear().range([0, 1]);
 
@@ -46,6 +46,11 @@ const draw = (props, data) => {
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
   
+    tooltip = d3.select('.container')
+     .append('div')
+     .attr('class', 'node-tooltip')
+     .html('Tooltip');
+
     var legend = svg.selectAll(".legend")
       .data(colors.domain())
       .enter().append("g")
@@ -77,6 +82,55 @@ const draw = (props, data) => {
     links = []
 
     var txn_nodes = []
+    // Each transaction will be a link.
+    // Every source and target will have one link with sum of transactions between them
+    
+    //aggregate all transactions between same addresses
+    var sender_receiver = {}
+    var accounts_aggregates = {}
+    chart_data.forEach(function (d) {
+      if (d.sender in sender_receiver){
+        var receivers = sender_receiver[d.sender]
+        //If sender and receiver are already in just add them up
+        if (d.receiver in receivers){
+          receivers[d.receiver] = receivers[d.receiver] + d.amount
+        }
+        // Only sender is in so create new receiver for sender
+        else{
+          receivers[d.receiver] = d.amount
+        }
+      }
+      // If receiver was a sender before then check if sender was a receiver and add those up
+      else if (d.receiver in sender_receiver){
+        var receivers = sender_receiver[d.receiver]
+        if (d.sender in receivers){
+          receivers[d.sender] = receivers[d.sender] + d.amount
+        }
+      }
+      // else create new sender and receiver
+      else{
+        sender_receiver[d.sender] = {}
+        sender_receiver[d.sender][d.receiver] = d.amount
+      }
+
+      // Now also put in account aggregates
+      var total_payments = 0
+      var total_receipts = 0
+      if (d.sender in accounts_aggregates){
+        total_payments = accounts_aggregates[d.sender].payments
+      }else{
+        accounts_aggregates[d.sender] = {payments: 0,receipts: 0}
+      }
+
+      if (d.receiver in accounts_aggregates){
+        total_receipts = accounts_aggregates[d.receiver].receipts
+      }else{
+        accounts_aggregates[d.receiver] = {payments: 0,receipts: 0}
+      }
+
+      accounts_aggregates[d.sender].payments = total_payments + d.amount
+      accounts_aggregates[d.receiver].receipts = total_receipts + d.amount
+    });
 
     // Get all addresses which will be nodes
     // Start with senders then go to receivers
@@ -105,7 +159,12 @@ const draw = (props, data) => {
       .rollup(function(values) 
       {
         var node = values[0]
-        nodes.push({"id":node.id,"account_type":node.account_type})
+        nodes.push({
+          "id":node.id,
+          "account_type":node.account_type,
+          "payments":accounts_aggregates[node.id].payments,
+          "receipts":accounts_aggregates[node.id].receipts
+        })
       })
       .entries(txn_nodes);
     
@@ -113,36 +172,6 @@ const draw = (props, data) => {
       .key(function (d) { return d.id; })
       .map(nodes).keys()
 
-    // Each transaction will be a link.
-    // Every source and target will have one link with sum of transactions between them
-    
-    //aggregate all transactions between same addresses
-    var sender_receiver = {}
-    chart_data.forEach(function (d) {
-      if (d.sender in sender_receiver){
-        var receivers = sender_receiver[d.sender]
-        //If sender and receiver are already in just add them up
-        if (d.receiver in receivers){
-          receivers[d.receiver] = receivers[d.receiver] + d.amount
-        }
-        // Only sender is in so create new receiver for sender
-        else{
-          receivers[d.receiver] = d.amount
-        }
-      }
-      // If receiver was a sender before then check if sender was a receiver and add those up
-      else if (d.receiver in sender_receiver){
-        var receivers = sender_receiver[d.receiver]
-        if (d.sender in receivers){
-          receivers[d.sender] = receivers[d.sender] + d.amount
-        }
-      }
-      // else create new sender and receiver
-      else{
-        sender_receiver[d.sender] = {}
-        sender_receiver[d.sender][d.receiver] = d.amount
-      }
-    });
 
     for (var sender in sender_receiver) {
       var receivers = sender_receiver[sender];
@@ -206,6 +235,8 @@ const draw = (props, data) => {
         txn.receiver = og_txn.receiver
       }
     });
+
+    delete groups[group_id];
 
     //console.log("ungroup "+group_id)
     //console.log(chart_data)
@@ -298,25 +329,42 @@ const draw = (props, data) => {
       .selectAll('div')
       .data(nodes).enter()
       .append('div')
-      .attr('class', d => {return 'node ' + d.account_type.split(' ').join('_').toLowerCase()})
+      .attr('class', d => {
+
+        var acc_type =  d.account_type.split(' ').join('_').toLowerCase()
+        var group = ""
+
+        if (d.id in groups){
+          group = "node-group"
+        }
+
+        return "node " + acc_type + " " + group;
+      })
       .call(d3.drag()
           .on('start', dragStart)
           .on('drag', drag)
           .on('end', dragEnd)
       )
       .on('mouseover',d => {
-        //group_data(group_by_account_type);
-        /*tooltip.html(d.country)
+        tooltip.html(
+          "<p/>Account Name:"+ d.id + 
+          "<p/>Payments:" + d.payments +
+          "<p/>Receipts:"  + d.receipts)
           .style('left', d3_event.pageX + 5 +'px')
           .style('top', d3_event.pageY + 5 + 'px')
-          .style('opacity', .9);*/
+          .style('opacity', .9);
       })
       .on('mouseout', () => {
-        /*tooltip.style('opacity', 0)
+        tooltip.style('opacity', 0)
           .style('left', '0px')
-          .style('top', '0px');*/
+          .style('top', '0px');
       })
       .on('click', d => {
+
+        tooltip.style('opacity', 0)
+          .style('left', '0px')
+          .style('top', '0px');
+
         if (d.id in groups){
           ungroup_data(d.id);
         }
