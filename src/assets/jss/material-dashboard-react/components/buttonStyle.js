@@ -8,6 +8,7 @@ import {
   roseColor,
   whiteColor,
   blackColor,
+  groupColors,
   hexToRgb,
 } from "assets/jss/material-dashboard-react.js";
 
@@ -179,6 +180,117 @@ const buttonStyle = {
         hexToRgb(blackColor) +
         ", 0.12), 0 8px 10px -5px rgba(" +
         hexToRgb(successColor[0]) +
+        ", 0.2)",
+    },
+  },
+  banks: {
+    backgroundColor: groupColors["banks"],
+    textAlign: "right",
+    boxShadow:
+      "0 2px 2px 0 rgba(" +
+      hexToRgb(groupColors["banks"]) +
+      ", 0.14), 0 3px 1px -2px rgba(" +
+      hexToRgb(groupColors["banks"]) +
+      ", 0.2), 0 1px 5px 0 rgba(" +
+      hexToRgb(groupColors["banks"]) +
+      ", 0.12)",
+    "&:hover,&:focus": {
+      backgroundColor: groupColors["banks"],
+      boxShadow:
+        "0 14px 26px -12px rgba(" +
+        hexToRgb(groupColors["banks"]) +
+        ", 0.42), 0 4px 23px 0px rgba(" +
+        hexToRgb(blackColor) +
+        ", 0.12), 0 8px 10px -5px rgba(" +
+        hexToRgb(groupColors["banks"]) +
+        ", 0.2)",
+    },
+  },
+  central_bank: {
+    backgroundColor: groupColors["central_bank"],
+    boxShadow:
+      "0 2px 2px 0 rgba(" +
+      hexToRgb(groupColors["central_bank"]) +
+      ", 0.14), 0 3px 1px -2px rgba(" +
+      hexToRgb(groupColors["central_bank"]) +
+      ", 0.2), 0 1px 5px 0 rgba(" +
+      hexToRgb(groupColors["central_bank"]) +
+      ", 0.12)",
+    "&:hover,&:focus": {
+      backgroundColor: groupColors["central_bank"],
+      boxShadow:
+        "0 14px 26px -12px rgba(" +
+        hexToRgb(groupColors["central_bank"]) +
+        ", 0.42), 0 4px 23px 0px rgba(" +
+        hexToRgb(blackColor) +
+        ", 0.12), 0 8px 10px -5px rgba(" +
+        hexToRgb(groupColors["central_bank"]) +
+        ", 0.2)",
+    },
+  },
+  firms: {
+    backgroundColor: groupColors["firms"],
+    boxShadow:
+      "0 2px 2px 0 rgba(" +
+      hexToRgb(groupColors["firms"]) +
+      ", 0.14), 0 3px 1px -2px rgba(" +
+      hexToRgb(groupColors["firms"]) +
+      ", 0.2), 0 1px 5px 0 rgba(" +
+      hexToRgb(groupColors["firms"]) +
+      ", 0.12)",
+    "&:hover,&:focus": {
+      backgroundColor: groupColors["firms"],
+      boxShadow:
+        "0 14px 26px -12px rgba(" +
+        hexToRgb(groupColors["firms"]) +
+        ", 0.42), 0 4px 23px 0px rgba(" +
+        hexToRgb(blackColor) +
+        ", 0.12), 0 8px 10px -5px rgba(" +
+        hexToRgb(groupColors["firms"]) +
+        ", 0.2)",
+    },
+  },
+  households: {
+    backgroundColor: groupColors["households"],
+    boxShadow:
+      "0 2px 2px 0 rgba(" +
+      hexToRgb(groupColors["households"]) +
+      ", 0.14), 0 3px 1px -2px rgba(" +
+      hexToRgb(groupColors["households"]) +
+      ", 0.2), 0 1px 5px 0 rgba(" +
+      hexToRgb(groupColors["households"]) +
+      ", 0.12)",
+    "&:hover,&:focus": {
+      backgroundColor: groupColors["households"],
+      boxShadow:
+        "0 14px 26px -12px rgba(" +
+        hexToRgb(groupColors["households"]) +
+        ", 0.42), 0 4px 23px 0px rgba(" +
+        hexToRgb(blackColor) +
+        ", 0.12), 0 8px 10px -5px rgba(" +
+        hexToRgb(groupColors["households"]) +
+        ", 0.2)",
+    },
+  },
+  lsps: {
+    backgroundColor: groupColors["lsps"],
+    boxShadow:
+      "0 2px 2px 0 rgba(" +
+      hexToRgb(groupColors["lsps"]) +
+      ", 0.14), 0 3px 1px -2px rgba(" +
+      hexToRgb(groupColors["lsps"]) +
+      ", 0.2), 0 1px 5px 0 rgba(" +
+      hexToRgb(groupColors["lsps"]) +
+      ", 0.12)",
+    "&:hover,&:focus": {
+      backgroundColor: groupColors["lsps"],
+      boxShadow:
+        "0 14px 26px -12px rgba(" +
+        hexToRgb(groupColors["lsps"]) +
+        ", 0.42), 0 4px 23px 0px rgba(" +
+        hexToRgb(blackColor) +
+        ", 0.12), 0 8px 10px -5px rgba(" +
+        hexToRgb(groupColors["lsps"]) +
         ", 0.2)",
     },
   },

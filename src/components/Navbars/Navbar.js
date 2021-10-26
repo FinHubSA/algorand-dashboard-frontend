@@ -24,12 +24,12 @@ const useStyles = makeStyles(styles);
 export default function Header(props) {
   const classes = useStyles();
   const routeName = useRouteName();
-  const { color } = props;
+  const { color, display } = props;
   const appBarClasses = classNames({
     [" " + classes[color]]: color,
   });
   return (
-    <AppBar className={classes.appBar + appBarClasses}>
+    <AppBar style={{display: display ? "" : "none"}} className={classes.appBar + appBarClasses}>
       <Toolbar className={classes.container}>
         <div className={classes.flex}>
           {/* Here we create navbar brand, based on route name */}
