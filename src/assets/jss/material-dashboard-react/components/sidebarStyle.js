@@ -58,9 +58,11 @@ const sidebarStyle = function (theme) {
       width: drawerWidthCollapsed,
       [theme.breakpoints.up("md")]: {
         width: drawerWidthCollapsed,
+        overflowX: "hidden",
       },
       [theme.breakpoints.down("sm")]: {
         width: drawerWidthCollapsed,
+        overflowX: "hidden",
       },
     },
     drawerPaperRTL: {

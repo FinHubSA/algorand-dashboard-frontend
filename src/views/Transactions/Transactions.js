@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import { Switch, Route, Redirect } from "react-router-dom";
+import React from "react";
+//import { Switch, Route, Redirect } from "react-router-dom";
 import * as d3 from "d3";
 import { event as d3_event } from "d3-selection";
 import { drag as d3Drag } from "d3-drag";
@@ -8,8 +8,8 @@ import _ from "lodash";
 import $ from "jquery";
 // @material-ui/core
 import { makeStyles } from "@material-ui/core/styles";
-import Modal from '@material-ui/core/Modal';
 import TextField from '@material-ui/core/TextField';
+import { Select, MenuItem } from '@material-ui/core';
 // core components
 import Button from "components/CustomButtons/Button.js";
 import GridItem from "components/Grid/GridItem.js";
@@ -42,20 +42,9 @@ const useStyles = makeStyles(styles);
 
 export default function Transactions({ ...rest }) {
   const classes = useStyles();
-  const [chartWidth, setChartWidth] = React.useState(1100);
-  const [chartHeight, setChartHeight] = React.useState(530);
-  const [fixedClasses, setFixedClasses] = React.useState("dropdown show");
-  const [side_bar_data, set_side_bar_data] = React.useState([
-    { name: "Central Bank" },
-  ]);
-  const handleImageClick = (image) => {};
-  const handleFixedClick = () => {
-    if (fixedClasses === "dropdown") {
-      setFixedClasses("dropdown show");
-    } else {
-      setFixedClasses("dropdown");
-    }
-  };
+  const chartWidth = 1100
+  const chartHeight = 530;
+  const groupBy = React.useRef();
   const [data, set_data] = React.useState([
     {
       key: "",
@@ -175,12 +164,24 @@ export default function Transactions({ ...rest }) {
   ]);
 
   React.useEffect(() => {
+    console.log("transactions fired");
     draw(data);
   });
 
-  function componentDidUpdate() {
-    draw(this.props, data);
-  }
+  // Data for drawing
+  var chart_data = {}; 
+  var simulation;
+  var nodes = [];
+  var links = [];
+  var groups = {};
+  var svg;
+  var tooltip;
+  var ticked;
+  var width;
+  var height;
+  var linkWidthScale = d3.scaleLinear().range([1, 5]);
+  var linkStrengthScale = d3.scaleLinear().range([0, 1]);
+  var margin = { top: 0, right: 0, bottom: 0, left: 0 };
 
   // Data for drawing
   var chart_data = {}; 
@@ -241,7 +242,7 @@ export default function Transactions({ ...rest }) {
       .attr("class", "node-tooltip")
       .html("Tooltip");
 
-    /*var legend = svg
+    var legend = svg
       .selectAll(".legend")
       .data(colors.domain())
       .enter()
@@ -268,11 +269,8 @@ export default function Transactions({ ...rest }) {
         return d;
       })
       .on("click", function (d) {
-        var grouped = group_data(group_by_account_type, d);
-        if (grouped) {
-          refresh_data();
-        }
-      }); */
+        
+      }); 
   }
 
   /**
@@ -475,18 +473,7 @@ export default function Transactions({ ...rest }) {
         d3Drag().on("start", dragStart).on("drag", drag).on("end", dragEnd)
       )
       .on("mouseover", (d) => {
-        tooltip
-          .html(
-            "<p/>Account Name:" +
-              d.id +
-              "<p/>Payments:" +
-              d.payments +
-              "<p/>Receipts:" +
-              d.receipts
-          )
-          .style("left", d3_event.pageX + 5 + "px")
-          .style("top", d3_event.pageY + 5 + "px")
-          .style("opacity", 0.9);
+        node_tooltip(d);
       })
       .on("mouseout", () => {
         tooltip.style("opacity", 0).style("left", "0px").style("top", "0px");
@@ -517,24 +504,46 @@ export default function Transactions({ ...rest }) {
         });
 
       node.attr("style", (d) => {
-        return "left: " + (d.x + 14) + "px; top: " + (d.y + 7) + "px";
+        return "left: " + (d.x - 3) + "px; top: " + (d.y + 70) + "px";
       });
     };
   }
 
-  function start_simulation() {
-    //Starting simulation
-    simulation.nodes(nodes).on("tick", ticked);
+  function node_tooltip(d) {
+    var html = ""
+    if (d.id in groups) {
+      var info = groups[d.id]["info"];
+      var range = groups[d.id]["range"];
+      html = 
+        "<div class='node-info'>"+
+          "<p>Group Info: " +info+"</p>" +
+          "<p>Group Range: " +range +"</p>" +
+          "<p>Payments: <i class='fas fa-rupee-sign' area-hidden='true'></i>" +d.payments + "</p>" +
+          "<p>Receipts: " + d.receipts + "</p>" +
+        "</div>"
+    }else{
+      html = 
+        "<div class='node-info'>"+
+          "<p>Account Name: " +d.id +"</p>" +
+          "<p>Payments: <i class='fas fa-rupee-sign' area-hidden='true'></i>" +d.payments + "</p>" +
+          "<p>Receipts: " + d.receipts + "</p>" +
+        "</div>"
+    }
 
-    simulation.force("link").links(links);
-
-    //console.log("final***");
-    //console.log(links);
+    tooltip
+      .html(html)
+      .style("left", d3_event.pageX - 100 + "px")
+      .style("top", d3_event.pageY - 20 + "px")
+      .style("opacity", 0.9);
   }
 
-  function group_data(criteria, parameters) {
-    console.log("params**")
-    console.log(parameters)
+  function start_simulation() {
+    //Starting simulation
+    simulation.nodes(nodes).on("tick", ticked).on('end', function() {});
+    simulation.force("link").links(links);
+  }
+
+  function group_data(criteria, parameters, group_info="", group_range="") {
     var group_id = "group_" + Object.keys(groups).length;
     var group_txns = {};
     var grouped_nodes = {};
@@ -546,6 +555,7 @@ export default function Transactions({ ...rest }) {
         grouped_nodes[txn.sender] = 1;
         txn.sender = group_id;
       }
+    });
 
       if (criteria(txn, parameters)[1]) {
         grouped_nodes[txn.receiver] = 1;
@@ -556,7 +566,10 @@ export default function Transactions({ ...rest }) {
       group_txns[txn.id] = orignial_txn;
     });
 
-    groups[group_id] = group_txns;
+    groups[group_id] = {}
+    groups[group_id]["transactions"] = group_txns;
+    groups[group_id]["info"] = group_info;
+    groups[group_id]["range"] = group_range;
 
     console.log("grouped**");
     console.log(grouped_nodes);
@@ -576,7 +589,7 @@ export default function Transactions({ ...rest }) {
 
     chart_data.forEach(function (txn) {
       if (txn.sender === group_id || txn.receiver === group_id) {
-        var og_txn = groups[group_id][txn.id];
+        var og_txn = groups[group_id]["transactions"][txn.id];
 
         txn.sender = og_txn.sender;
         txn.receiver = og_txn.receiver;
@@ -602,8 +615,13 @@ export default function Transactions({ ...rest }) {
    * @returns 
    */
   function group_by_account_type(txn, parameters) {
-    var account_type = parameters[0]
     var results = [false, false];
+    var account_type = parameters[0]
+    
+    if (account_type === undefined){
+      return results;
+    }
+
     if (txn.sender_type.toLowerCase() === account_type.toLowerCase()) {
       results[0] = true;
     }
@@ -633,11 +651,16 @@ export default function Transactions({ ...rest }) {
    * @returns 
    */
   function group_by_range(txn, parameters) {
+    var results = [false, false];
     var account_type = parameters[0]
+
+    if (account_type === undefined){
+      return results;
+    }
+
     var min = parseFloat(parameters[1])
     var max = parseFloat(parameters[2])
 
-    var results = [false, false];
     if (txn.sender_type.toLowerCase() === account_type.toLowerCase()) {
       if (min <= txn.sender_balance && txn.sender_balance < max) {
         results[0] = true;
@@ -649,37 +672,16 @@ export default function Transactions({ ...rest }) {
         results[1] = true;
       }
     }
-
     return results;
   }
 
-  function NetworkChartCard() {
-    return (
-      <CardBody>
-        <div style={{ overflowX: "hidden", overflowY: "hidden" }}>
-          <div className="container">
-            <div className="vis-networkchart"></div>
-          </div>
-        </div>
-      </CardBody>
-    );
-  }  
+  const selected = React.useRef();
 
-  const MemoizedNetworkChart = React.memo(NetworkChartCard);  
-  const [modalOpen, setModalOpen] = React.useState(false);
-  const [groupBy, setGroupBy] = React.useState("");
-
-  const handleModalOpen = () => {
-      setModalOpen(true);
-  };
-
-  const handleModalClose = () => {
-      setModalOpen(false);
-  };
-
-  const handleGroupClick = (groupBy) => {
-    setGroupBy(groupBy);
-    setModalOpen(true);
+  const handleSelectChange = event => {
+    console.log("drop **");
+    console.log(event.target.value);
+    //console.log(selectAcc.current)
+    selected.current = event.target.value;
   };
 
   return (
@@ -690,79 +692,74 @@ export default function Transactions({ ...rest }) {
             <CardHeader color="primary">
               <h4>Transactions</h4>
             </CardHeader>
-            <MemoizedNetworkChart />
-          </Card>
-        </GridItem>
-        {/*<GridItem xs={15} sm={15} md={2}>
-          <Card>
-            <CardHeader color="primary">
-              <h5>Legend</h5>
-            </CardHeader>
             <CardBody>
-              <div
-                style={{
-                  height: "100%",
-                  overflowX: "hidden",
-                  overflowY: "hidden",
-                }}
-              >
-                <div className="container"></div>
-              </div>
-            </CardBody>
-          </Card>
-              </GridItem>*/}
-        <FixedPlugin
-          handleImageClick={handleImageClick}
-          handleGroupClick={handleGroupClick}
-          handleFixedClick={handleFixedClick}
-          fixedClasses={fixedClasses}
-        />
-      </GridContainer>
-      <Modal
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
-        open={modalOpen}
-        onClose={handleModalClose}
-        style={{display:'flex',alignItems:'center',justifyContent:'center'}}
-      >
-        <GridContainer>
-          <GridItem xs={6} sm={6} md={6}>
-            <Card>
-              <CardBody profile>
-                <div style={{textAlign:"center"}}>
-                  <h4 className={classes.cardTitle}>Set Grouping Parameters</h4>
-                  <TextField style={{margin:"5px"}} id="min-range" label="Min" variant="outlined" />
-                  <TextField style={{margin:"5px"}} id="max-range" label="Max" variant="outlined" />
-                  <Button 
-                    color="primary" 
-                    round
-                    onClick={() => {
-                      var grouped = group_data(group_by_account_type, [groupBy]);
-                      if (grouped) {
-                        refresh_data();
-                      }
-                    }}>
-                    Group All
-                  </Button>
+              <GridContainer>
+                <GridItem xs={12} sm={2} md={2}>
+                  <Select
+                    style={{margin:"5px", width:"100%"}}
+                    variant="outlined"
+                    id="account_type_select"
+                    label="Account Type"
+                    onChange={handleSelectChange}
+                  >
+                    <MenuItem value="Households">Households</MenuItem>
+                    <MenuItem value="Banks">Banks</MenuItem>
+                    <MenuItem value="Firms">Firms</MenuItem>
+                    <MenuItem value="LSP">License Service Providers</MenuItem>
+                    <MenuItem value="Central Bank">Central Bank</MenuItem>
+                  </Select>
+                </GridItem>
+                <GridItem xs={12} sm={2} md={2}>
+                  <TextField style={{margin:"5px"}} id="min-range" label="Min Balance" variant="outlined" />
+                </GridItem>
+                <GridItem xs={12} sm={2} md={2}>
+                  <TextField style={{margin:"5px"}} id="max-range" label="Max Balance" variant="outlined" />
+                </GridItem>
+                <GridItem xs={12} sm={2} md={2}>
                   <Button 
                     color="primary" 
                     round
                     onClick={() => {
                       var min = $("#min-range").val();
                       var max = $("#max-range").val();
-                      var grouped = group_data(group_by_range, [groupBy, min, max]);
+
+                      var group_info = selected.current;
+                      var group_range = min+" - "+max;
+
+                      var grouped = group_data(group_by_range, [selected.current, min, max], group_info, group_range);
                       if (grouped) {
                         refresh_data();
                       }
                     }}>
                     Group Range
                   </Button>
+                </GridItem>
+                <GridItem xs={12} sm={2} md={2}>
+                  <Button 
+                    color="primary" 
+                    round
+                    onClick={() => {
+                      var group_info = selected.current;
+                      var group_range = "All";
+
+                      var grouped = group_data(group_by_account_type, [selected.current], group_info, group_range);
+                      if (grouped) {
+                        refresh_data();
+                      }
+                    }}>
+                    Group All
+                  </Button>
+                </GridItem>
+                <div style={{ overflowX: "auto", overflowY: "hidden" }}>
+                  <div className="container">
+                    <div className="vis-networkchart"></div>
+                  </div>
                 </div>
-              </CardBody>
-            </Card>
-          </GridItem>
-        </GridContainer>
-      </Modal>
+              </GridContainer>
+            </CardBody>
+          </Card>
+        </GridItem>
+      </GridContainer>
     </div>
   );
 }

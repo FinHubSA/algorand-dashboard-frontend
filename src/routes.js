@@ -64,7 +64,7 @@ const dashboardRoutes = [
     component: FundsFlow,
     layout: "/admin",
   },
-  {
+  /*{
     path: "/user",
     name: "User Profile",
     rtlName: "ملف تعريفي للمستخدم",
@@ -120,7 +120,7 @@ const dashboardRoutes = [
     component: RTLPage,
     layout: "/rtl",
   },
-  /*{
+  {
     path: "/upgrade-to-pro",
     name: "Upgrade To PRO",
     rtlName: "التطور للاحترافية",

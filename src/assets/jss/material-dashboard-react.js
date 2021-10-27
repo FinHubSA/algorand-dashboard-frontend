@@ -52,7 +52,7 @@ const hexToRgb = (input) => {
 // #############################
 
 const drawerWidth = 260;
-const drawerWidthCollapsed = 100;
+const drawerWidthCollapsed = 80;
 
 const transition = {
   transition: "all 0.33s cubic-bezier(0.685, 0.0473, 0.346, 1)",

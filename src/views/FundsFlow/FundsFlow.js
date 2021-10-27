@@ -94,6 +94,7 @@ export default function FundsFlow({ ...rest }) {
   ]);
 
   React.useEffect(() => {
+    console.log("flow called");
     draw(data);
   });
 

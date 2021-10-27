@@ -102,6 +102,23 @@ h5 {
   cursor: pointer;
 }
 
+.node-info {
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 300;
+  line-height: 1em;
+  color: rgba(0, 0, 0, 0.87);
+  font-size: .875rem;
+  word-wrap: break-word;
+  -webkit-tap-highlight-color: transparent;
+  letter-spacing: normal !important;
+  -webkit-font-smoothing: antialiased;
+  flex: 1 1 auto;
+  padding: 10px;
+  position: relative;
+  -webkit-box-flex: 1;
+  margin-top: 0px;
+}
+
 .clearfix:before,
 .clearfix:after,
 .dl-horizontal dd:before,
