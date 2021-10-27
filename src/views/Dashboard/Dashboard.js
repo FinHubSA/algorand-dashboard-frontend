@@ -77,7 +77,7 @@ export default function Dashboard() {
               <h3 className={classes.cardTitle}> {total_transactions}
                 <small>GB</small>
               </h3>
-            </CardHeader>
+            </CardHeader>s
             <CardFooter stats>
              <div className={classes.stats}>
                 <Update />
