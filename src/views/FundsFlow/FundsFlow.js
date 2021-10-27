@@ -11,8 +11,8 @@ import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 
 export default function FundsFlow({ ...rest }) {
-  const [chartWidth, setChartWidth] = React.useState(1100);
-  const [chartHeight, setChartHeight] = React.useState(530);
+  const [chartWidth, setChartWidth] = React.useState(800);
+  const [chartHeight, setChartHeight] = React.useState(400);
   const [fixedClasses, setFixedClasses] = React.useState("dropdown show");
   const [side_bar_data, set_side_bar_data] = React.useState([
     { name: "Central Bank" },
