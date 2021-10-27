@@ -72,23 +72,23 @@ h5 {
   opacity: 0;
 }
 
-.central_bank {
+.centralbank {
   background-color: #40e0d0;
 }
 
-.households {
+.household {
   background-color: #a52a2a;
 }
 
-.firms {
+.firm {
   background-color: #008000;
 }
 
-.banks {
+.bank {
   background-color: #ff8c00;
 }
 
-.lsps {
+.lsp {
   background-color: #800080;
 }
 

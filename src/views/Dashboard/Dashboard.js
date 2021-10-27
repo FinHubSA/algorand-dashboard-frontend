@@ -28,7 +28,7 @@ import CardHeader from "components/Card/CardHeader.js";
 import CardIcon from "components/Card/CardIcon.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
-import axios from "axios"
+import axios from "axios";
 
 import Transactions from "views/Transactions/Transactions.js";
 import FundsFlow from "views/FundsFlow/FundsFlow.js";
@@ -44,17 +44,17 @@ import {
 
 import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js";
 
-
 const useStyles = makeStyles(styles);
 
 export default function Dashboard() {
   const classes = useStyles();
   const [total_transactions, total_t] = useState('');
-  const url = "http://localhost:8080/api/total_transactions"
-
+  var url = "http://localhost:8000/api/total_transactions"
+  
   const getTotal_transactions = () => {
     axios.get(url).then((response) => {
-      print(response.data)
+      console.log(response.data)
+
       const TotalTransactions = response.data.total_transactions;
       total_t(TotalTransactions);
     })

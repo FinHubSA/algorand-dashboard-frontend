@@ -16,92 +16,380 @@ const useStyles = makeStyles(styles);
 
 export default function FundsFlow({ ...rest }) {
   const classes = useStyles();
-  const [chartWidth, setChartWidth] = React.useState(750);
-  const [chartHeight, setChartHeight] = React.useState(250);
-  const [fixedClasses, setFixedClasses] = React.useState("dropdown show");
-  const [side_bar_data, set_side_bar_data] = React.useState([
-    { name: "Central Bank" },
-  ]);
+  const chartWidth = 750;
+  const chartHeight = 250
+
   const [data, set_data] = React.useState([
     {
-      account_type: "Banks",
+      account_type: "Households",
       instrument_type: "Deposits",
+      counter_party: "Banks",
+      payments: true,
+      value: 1000000,
+    },
+    {
+      account_type: "Firms",
+      instrument_type: "Deposits",
+      counter_party: "Banks",
+      payments: true,
+      value: 1500000,
+    },
+    {
+      account_type: "Central Bank",
+      instrument_type: "Bank Notes",
       counter_party: "Households",
-      asset: false,
+      payments: true,
       value: 1000000,
     },
     {
       account_type: "Banks",
-      instrument_type: "Deposits",
+      instrument_type: "Loans and Bonds",
       counter_party: "Firms",
-      asset: false,
+      payments: true,
       value: 1500000,
     },
     {
       account_type: "Banks",
       instrument_type: "Reserves",
       counter_party: "Central Bank",
-      asset: true,
+      payments: true,
       value: 500000,
-    },
-    {
-      account_type: "Banks",
-      instrument_type: "Loans and Bonds",
-      counter_party: "Firms",
-      asset: true,
-      value: 2000000,
-    },
-
-    {
-      account_type: "Households",
-      instrument_type: "Bank Notes",
-      counter_party: "Central Bank",
-      asset: false,
-      value: 1000000,
-    },
-    {
-      account_type: "Households",
-      instrument_type: "Deposits",
-      counter_party: "Banks",
-      asset: true,
-      value: 1000000,
-    },
-
-    {
-      account_type: "Firms",
-      instrument_type: "Loans and Bonds",
-      counter_party: "Banks",
-      asset: false,
-      value: 1500000,
-    },
-    {
-      account_type: "Firms",
-      instrument_type: "Deposits",
-      counter_party: "Banks",
-      asset: true,
-      value: 1500000,
-    },
-
-    {
-      account_type: "Central Bank",
-      instrument_type: "Reserves",
-      counter_party: "Banks",
-      asset: false,
-      value: 500000,
-    },
-    {
-      account_type: "Central Bank",
-      instrument_type: "Bank Notes",
-      counter_party: "Households",
-      asset: true,
-      value: 1000000,
-    },
+    }
   ]);
 
   React.useEffect(() => {
     console.log("flow called");
     draw(data);
   });
+
+  const margin = { top: 20, right: 20, bottom: 30, left: 40 };
+  const width = chartWidth - margin.left - margin.right;
+  const height = chartHeight - margin.top - margin.bottom;
+  const node_labels = {
+    "Banks": "Banks",
+    "Central Bank": "Central Bank",
+    "Firms": "Firms",
+    "Households": "Households",
+    "License Service Providers": "License Service Providers",
+    "Bank Notes": "Bank Notes",
+    "Deposits": "Deposits",
+    "Loans and Bonds": "Loans and Bonds",
+    "Reserves": "Reserves",
+    "Central Bank Digital Currency": "Central Bank Digital Currency",
+  };
+
+  var svg;
+  var nodes = [];
+  var links = [];
+  var linksX = [];
+  var fmt = d3.format("0,.0f");
+  var colors = d3
+    .scaleOrdinal()
+    .domain([
+      "BN",
+      "CB",
+      "FM",
+      "HS",
+      "LSP",
+      "Bank Notes",
+      "Deposits",
+      "Loans and Bonds",
+      "Reserves",
+      "Central Bank Digital Currency",
+    ])
+    .range([
+      "#ff8c00",
+      "#40e0d0",
+      "#008000",
+      "#a52a2a",
+      "#4fc2be",
+      "#9c9b9b",
+      "#9c9b9b",
+      "#9c9b9b",
+      "#9c9b9b",
+      "#9c9b9b",
+    ]);
+
+  function draw(data) {
+    initialize_chart();
+    prepare_data();
+    initialize_sankey();
+  }
+
+  function initialize_chart() {
+    d3.select(".vis-sankeychart > *").remove();
+    
+    //create svg
+    svg = d3
+      .select("#sankeychart")
+      .append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+  }
+
+  function prepare_data() {
+    /**** Get nodes and links ****/
+  
+    /*  
+          We are creating a chart like this:
+          Total Payments  -> Instrument -> Receipts
+      */
+  
+    // We need to add up all the payments of each account type.
+    // An account type might have 2 deposits payments.
+    // For example, households may deposit into banks and firms.
+    // Here we want to add these 2 into 1 deposits payment
+  
+    var payments_sub_totals = d3
+      .nest()
+      .key(function (d) {
+        return d.account_type;
+      })
+      .key(function (d) {
+        return d.payments;
+      })
+      .key(function (d) {
+        return d.instrument_type;
+      })
+      .rollup(function (values) {
+        return d3.sum(values, function (d) {
+          return d.value;
+        });
+      })
+      .entries(data);
+  
+    console.log("sub totals:");
+    console.log(payments_sub_totals);
+  
+    payments_sub_totals.forEach(function (acc_type) {
+      acc_type.values.forEach(function (is_payments) {
+        if (is_payments.key === "true") {
+          is_payments.values.forEach(function (ins_type) {
+            nodes.push({ name: acc_type.key + " payments" });
+  
+            var link_data = {
+              source: acc_type.key + " payments",
+              target: ins_type.key,
+              value: ins_type.value,
+              payments: acc_type.key + " payments",
+              instrument: ins_type.key,
+              color: acc_type.key,
+              first: acc_type.key,
+              second: ins_type.key,
+              liaIns: "L" + acc_type.key + " payments" + ins_type.key,
+              liaIns2: acc_type.key + "_" + ins_type.key,
+            };
+  
+            links.push(link_data);
+          });
+        }
+      });
+    });
+  
+    //get all source and target into nodes
+    //will reduce to unique in the next step
+    //also get links in object form
+    data.forEach(function (d) {
+      if (d.payments === true) {
+        nodes.push({ name: d.instrument_type });
+        nodes.push({ name: d.counter_party + " asset" });
+        links.push({
+          source: d.instrument_type,
+          target: d.counter_party + " asset",
+          value: d.value,
+          payments: d.account_type + " payments",
+          instrument: d.instrument_type,
+          color: d.instrument_type,
+          first: d.instrument_type,
+          second: d.instrument_type,
+          third: d.counter_party,
+          liaIns: "L" + d.account_type + " payments" + d.instrument_type,
+          liaIns2:
+            d.instrument_type + "_" + d.instrument_type + "_" + d.counter_party,
+        });
+      }
+    });
+  
+    // Reduce to unique set of nodes
+    nodes = d3
+      .nest()
+      .key(function (d) {
+        return d.name;
+      })
+      .map(nodes)
+      .keys();
+  
+    // Substitute source and target with node id
+    links.forEach(function (d) {
+      d.source = nodes.indexOf(d.source);
+      d.target = nodes.indexOf(d.target);
+      d.payments = nodes.indexOf(d.payments);
+      d.instrument = nodes.indexOf(d.instrument);
+    });
+  
+    console.log("nodes:");
+    console.log(nodes);
+  
+    console.log("links:");
+    console.log(links);
+  
+    // Get back nodes as an array of objects
+    nodes.forEach(function (d, i) {
+      nodes[i] = { name: d };
+    });
+  
+    links.forEach(function (d) {
+      linksX.push({
+        source: d.source,
+        target: d.target,
+        value: d.value,
+        color: d.color,
+        liaIns: "L" + d.payments + d.instrument,
+        liaIns2: d.first + "_" + d.second + "_" + d.third,
+      });
+    });
+  }
+
+  function initialize_sankey() {
+    /************************/
+    // Set the sankey diagram properties
+    var sankey = d3sankey()
+      .nodeWidth(20)
+      .nodePadding(7)
+      .size([width, height])
+      .nodes(nodes)
+      .links(linksX)
+      .layout(32);
+  
+    var path = sankey.link();
+  
+    // add in the links
+    var link = svg
+      .append("g")
+      .selectAll(".link")
+      .data(linksX)
+      .enter()
+      .append("path")
+      .attr("class", function (d) {
+        //console.log(d.source.name)
+        return "link" + " " + d.liaIns + " " + d.color;
+      })
+      .attr("d", path)
+      .style("stroke-width", function (d) {
+        if (d.dy > 0.0006) {
+          return Math.max(1, d.dy);
+        } else {
+          return 0;
+        }
+      })
+      .style("stroke", function (d) {
+        return colors(d.color);
+      })
+      .sort(function (a, b) {
+        return b.dy - a.dy;
+      })
+      .on("mouseover", function (d) {
+        if (d.value != 0.0006) {
+          var source = d.source.name.replace(/ payments| asset|/gi, "");
+          var target = d.target.name.replace(/ payments| asset|/gi, "");
+  
+          d3.select("#info").html(
+            node_labels[source] +
+              " &#8594; " +
+              node_labels[target] +
+              ": <span class='bold'> R" +
+              fmt(d.value) +
+              " billion </span>"
+          );
+  
+          d3.select(this).style("stroke-opacity", 0.5);
+  
+          d3.selectAll("." + d.liaIns).style("stroke-opacity", 0.5);
+        }
+      })
+      .on("mouseout", function () {
+        $("#info").empty();
+        d3.selectAll("path").style("stroke-opacity", 0.07);
+      });
+  
+    // add in the nodes
+    var node = svg
+      .append("g")
+      .selectAll(".node")
+      .data(nodes)
+      .enter()
+      .append("g")
+      .attr("class", "node")
+      .attr("transform", function (d) {
+        return "translate(" + d.x + "," + d.y + ")";
+      });
+  
+    // add the rectangles for the nodes
+    node
+      .append("rect")
+      .attr("height", function (d) {
+        return d.dy;
+      })
+      .attr("width", sankey.nodeWidth())
+      .style("fill", function (d) {
+        var name = d.name.replace(/ payments| asset|/gi, "");
+        return (d.color = colors(name));
+      })
+      .on("mouseover", function (d) {
+        var text = "";
+  
+        node = d.name.replace(/ payments| asset|/gi, "");
+  
+        if (d.name.substr(d.name.lastIndexOf(" ass") + 1) == "asset") {
+          text = "asset";
+        } else if (d.name.substr(d.name.lastIndexOf(" lia") + 1) == "payments") {
+          text = "payments";
+        } else {
+          text = "";
+        }
+  
+        d3.select("#info").html(
+          node_labels[node] +
+            " " +
+            text +
+            ": <span class='bold'> £" +
+            fmt(d.value) +
+            " billion </span>"
+        );
+        d3.select(this).classed("highlight", true);
+        var name = d.name.replace(/ payments| asset|/gi, "");
+        d3.selectAll("." + name).style("stroke-opacity", 0.5);
+      })
+      .on("mouseout", function (d) {
+        $("#info").empty();
+        d3.select(this).classed("highlight", false);
+        d3.selectAll("path").style("stroke-opacity", 0.07);
+      });
+  
+    // add in the title for the nodes
+    node
+      .append("text")
+      .attr("x", -6)
+      .attr("y", function (d) {
+        return d.dy / 2;
+      })
+      .attr("dy", ".35em")
+      .attr("text-anchor", "end")
+      .attr("transform", null)
+      .text(function (d) {
+        var name = d.name.replace("_", "&");
+        var asset = name.replace(" asset", "");
+        var payments = asset.replace(" payments", "");
+        return payments;
+      })
+      .filter(function (d) {
+        return d.x < width / 2;
+      })
+      .attr("x", 6 + sankey.nodeWidth())
+      .attr("text-anchor", "start");
+  };
 
   function d3sankey() {
     var sankey = {},
@@ -430,332 +718,9 @@ export default function FundsFlow({ ...rest }) {
     return sankey;
   }
 
-  function draw(data) {
-  
-    d3.select(".vis-sankeychart > *").remove();
-    const margin = { top: 20, right: 20, bottom: 30, left: 40 };
-    const width = chartWidth - margin.left - margin.right;
-    const height = chartHeight - margin.top - margin.bottom;
-  
-    var fmt = d3.format("0,.0f");
-  
-    var colors = d3
-      .scaleOrdinal()
-      .domain([
-        "BN",
-        "CB",
-        "FM",
-        "HS",
-        "LSP",
-        "Bank Notes",
-        "Deposits",
-        "Loans and Bonds",
-        "Reserves",
-        "Central Bank Digital Currency",
-      ])
-      .range([
-        "#ff8c00",
-        "#40e0d0",
-        "#008000",
-        "#a52a2a",
-        "#4fc2be",
-        "#9c9b9b",
-        "#9c9b9b",
-        "#9c9b9b",
-        "#9c9b9b",
-        "#9c9b9b",
-      ]);
-  
-    var fof_labels = {
-      Banks: "Banks",
-      "Central Bank": "Central Bank",
-      Firms: "Firms",
-      Households: "Households",
-      "License Service Providers": "License Service Providers",
-      "Bank Notes": "Bank Notes",
-      Deposits: "Deposits",
-      "Loans and Bonds": "Loans and Bonds",
-      Reserves: "Reserves",
-      "Central Bank Digital Currency": "Central Bank Digital Currency",
-    };
-  
-    //create svg
-    var svg = d3
-      .select("#sankeychart")
-      .append("svg")
-      .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
-      .append("g")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-  
-    /**** Get nodes and links ****/
-  
-    /*  
-          We are creating a chart like this:
-          Total Liabilities  -> Instrument -> Asset
-      */
-  
-    // We need to add up all the liabilities of each account type per instrument
-    // An account type might have 2 deposits liabilites.
-    // For example, Banks might have one for households and one for banks.
-    // Here we want to add these 2 into 1 deposits liability
-  
-    var liability_sub_totals = d3
-      .nest()
-      .key(function (d) {
-        return d.account_type;
-      })
-      .key(function (d) {
-        return d.asset;
-      })
-      .key(function (d) {
-        return d.instrument_type;
-      })
-      .rollup(function (values) {
-        return d3.sum(values, function (d) {
-          return d.value;
-        });
-      })
-      .entries(data);
-  
-    console.log("sub totals:");
-    console.log(liability_sub_totals);
-  
-    var links = [];
-    var nodes = [];
-  
-    liability_sub_totals.forEach(function (acc_type) {
-      acc_type.values.forEach(function (is_asset) {
-        if (is_asset.key === "false") {
-          is_asset.values.forEach(function (ins_type) {
-            nodes.push({ name: acc_type.key + " liability" });
-  
-            var link_data = {
-              source: acc_type.key + " liability",
-              target: ins_type.key,
-              value: ins_type.value,
-              liability: acc_type.key + " liability",
-              instrument: ins_type.key,
-              color: acc_type.key,
-              first: acc_type.key,
-              second: ins_type.key,
-              liaIns: "L" + acc_type.key + " liability" + ins_type.key,
-              liaIns2: acc_type.key + "_" + ins_type.key,
-            };
-  
-            links.push(link_data);
-          });
-        }
-      });
-    });
-  
-    //get all source and target into nodes
-    //will reduce to unique in the next step
-    //also get links in object form
-    data.forEach(function (d) {
-      if (d.asset === false) {
-        nodes.push({ name: d.instrument_type });
-        nodes.push({ name: d.counter_party + " asset" });
-        links.push({
-          source: d.instrument_type,
-          target: d.counter_party + " asset",
-          value: d.value,
-          liability: d.account_type + " liability",
-          instrument: d.instrument_type,
-          color: d.instrument_type,
-          first: d.instrument_type,
-          second: d.instrument_type,
-          third: d.counter_party,
-          liaIns: "L" + d.account_type + " liability" + d.instrument_type,
-          liaIns2:
-            d.instrument_type + "_" + d.instrument_type + "_" + d.counter_party,
-        });
-      }
-    });
-  
-    // Reduce to unique set of nodes
-    nodes = d3
-      .nest()
-      .key(function (d) {
-        return d.name;
-      })
-      .map(nodes)
-      .keys();
-  
-    // Substitute source and target with node id
-    links.forEach(function (d) {
-      d.source = nodes.indexOf(d.source);
-      d.target = nodes.indexOf(d.target);
-      d.liability = nodes.indexOf(d.liability);
-      d.instrument = nodes.indexOf(d.instrument);
-    });
-  
-    console.log("nodes:");
-    console.log(nodes);
-  
-    console.log("links:");
-    console.log(links);
-  
-    // Get back nodes as an array of objects
-    nodes.forEach(function (d, i) {
-      nodes[i] = { name: d };
-    });
-  
-    var linksX = [];
-  
-    links.forEach(function (d) {
-      linksX.push({
-        source: d.source,
-        target: d.target,
-        value: d.value,
-        color: d.color,
-        liaIns: "L" + d.liability + d.instrument,
-        liaIns2: d.first + "_" + d.second + "_" + d.third,
-      });
-    });
-  
-    /************************/
-  
-    // Set the sankey diagram properties
-    var sankey = d3sankey()
-      .nodeWidth(20)
-      .nodePadding(7)
-      .size([width, height])
-      .nodes(nodes)
-      .links(linksX)
-      .layout(32);
-  
-    var path = sankey.link();
-  
-    // add in the links
-    var link = svg
-      .append("g")
-      .selectAll(".link")
-      .data(linksX)
-      .enter()
-      .append("path")
-      .attr("class", function (d) {
-        //console.log(d.source.name)
-        return "link" + " " + d.liaIns + " " + d.color;
-      })
-      .attr("d", path)
-      .style("stroke-width", function (d) {
-        if (d.dy > 0.0006) {
-          return Math.max(1, d.dy);
-        } else {
-          return 0;
-        }
-      })
-      .style("stroke", function (d) {
-        return colors(d.color);
-      })
-      .sort(function (a, b) {
-        return b.dy - a.dy;
-      })
-      .on("mouseover", function (d) {
-        if (d.value != 0.0006) {
-          var source = d.source.name.replace(/ liability| asset|/gi, "");
-          var target = d.target.name.replace(/ liability| asset|/gi, "");
-  
-          d3.select("#info").html(
-            fof_labels[source] +
-              " &#8594; " +
-              fof_labels[target] +
-              ": <span class='bold'> £" +
-              fmt(d.value) +
-              " billion </span>"
-          );
-  
-          d3.select(this).style("stroke-opacity", 0.5);
-  
-          d3.selectAll("." + d.liaIns).style("stroke-opacity", 0.5);
-        }
-      })
-      .on("mouseout", function () {
-        $("#info").empty();
-        d3.selectAll("path").style("stroke-opacity", 0.07);
-      });
-  
-    // add in the nodes
-    var node = svg
-      .append("g")
-      .selectAll(".node")
-      .data(nodes)
-      .enter()
-      .append("g")
-      .attr("class", "node")
-      .attr("transform", function (d) {
-        return "translate(" + d.x + "," + d.y + ")";
-      });
-  
-    // add the rectangles for the nodes
-    node
-      .append("rect")
-      .attr("height", function (d) {
-        return d.dy;
-      })
-      .attr("width", sankey.nodeWidth())
-      .style("fill", function (d) {
-        var name = d.name.replace(/ liability| asset|/gi, "");
-        return (d.color = colors(name));
-      })
-      .on("mouseover", function (d) {
-        var text = "";
-  
-        node = d.name.replace(/ liability| asset|/gi, "");
-  
-        if (d.name.substr(d.name.lastIndexOf(" ass") + 1) == "asset") {
-          text = "asset";
-        } else if (d.name.substr(d.name.lastIndexOf(" lia") + 1) == "liability") {
-          text = "liability";
-        } else {
-          text = "";
-        }
-  
-        d3.select("#info").html(
-          fof_labels[node] +
-            " " +
-            text +
-            ": <span class='bold'> £" +
-            fmt(d.value) +
-            " billion </span>"
-        );
-        d3.select(this).classed("highlight", true);
-        var name = d.name.replace(/ liability| asset|/gi, "");
-        d3.selectAll("." + name).style("stroke-opacity", 0.5);
-      })
-      .on("mouseout", function (d) {
-        $("#info").empty();
-        d3.select(this).classed("highlight", false);
-        d3.selectAll("path").style("stroke-opacity", 0.07);
-      });
-  
-    // add in the title for the nodes
-    node
-      .append("text")
-      .attr("x", -6)
-      .attr("y", function (d) {
-        return d.dy / 2;
-      })
-      .attr("dy", ".35em")
-      .attr("text-anchor", "end")
-      .attr("transform", null)
-      .text(function (d) {
-        var name = d.name.replace("_", "&");
-        var asset = name.replace(" asset", "");
-        var liability = asset.replace(" liability", "");
-        return liability;
-      })
-      .filter(function (d) {
-        return d.x < width / 2;
-      })
-      .attr("x", 6 + sankey.nodeWidth())
-      .attr("text-anchor", "start");
-  };
-
   return (
     <GridContainer>
-      <GridItem xs={15} sm={15} md={15}>
+      <GridItem xs={12} sm={12} md={12}>
         <Card>
           <CardHeader color="primary">
             <h4 style={{ marginTop: '5px', marginBottom: '5px' }} >Counterparty Flow Of Funds</h4>
