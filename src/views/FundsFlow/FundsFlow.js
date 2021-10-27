@@ -9,10 +9,15 @@ import GridContainer from "components/Grid/GridContainer.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
+import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js";
+
+
+const useStyles = makeStyles(styles);
 
 export default function FundsFlow({ ...rest }) {
-  const [chartWidth, setChartWidth] = React.useState(800);
-  const [chartHeight, setChartHeight] = React.useState(400);
+  const classes = useStyles();
+  const [chartWidth, setChartWidth] = React.useState(750);
+  const [chartHeight, setChartHeight] = React.useState(250);
   const [fixedClasses, setFixedClasses] = React.useState("dropdown show");
   const [side_bar_data, set_side_bar_data] = React.useState([
     { name: "Central Bank" },
@@ -753,15 +758,15 @@ export default function FundsFlow({ ...rest }) {
       <GridItem xs={15} sm={15} md={15}>
         <Card>
           <CardHeader color="primary">
-            <h4>Counterparty Flow Of Funds</h4>
+            <h4 style={{ marginTop: '5px', marginBottom: '5px' }} >Counterparty Flow Of Funds</h4>
           </CardHeader>
           <CardBody>
             <div style={{ overflowX: "hidden", overflowY: "hidden" }}>
               <div className="chart-container center">
                 <div className="row headings">
-                  <div className="col-sm-3 col-xs-4">Liability</div>
-                  <div className="col-sm-3 col-xs-4 text-center">Instrument</div>
-                  <div className="col-sm-3 col-xs-4 text-right">Asset</div>
+                  <div className="col-sm-3 col-xs-4"><h6 className={classes.cardTitle} style={{ marginTop: '0px', marginBottom: '2px' }}>Liability</h6></div>
+                  <div className="col-sm-4 col-xs-4 text-right"><h6 className={classes.cardTitle} style={{ marginTop: '0px', marginBottom: '2px' }}>Instrument</h6></div>
+                  <div className="col-sm-3 col-xs-4 text-right"><h6 className={classes.cardTitle} style={{ marginTop: '0px', marginBottom: '2px' }}>Asset</h6></div>
                 </div>
                 <div className="row">
                   <div className="col-sm-9  text-center" id="info"></div>

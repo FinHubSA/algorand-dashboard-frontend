@@ -216,9 +216,39 @@ export default function Dashboard() {
         </GridItem>
       </GridContainer> */}
       <GridContainer>
-        <GridItem xs={12} sm={12} md={12}>
+        <GridItem xs={12} sm={12} md={8}>
           <FundsFlow />
         </GridItem>
+        <GridItem xs={5} sm={12} md={4}>
+          <Card chart>
+            <CardHeader color="success">
+              <ChartistGraph
+                className="ct-chart"
+                data={dailySalesChart.data}
+                type="Line"
+                options={dailySalesChart.options}
+                listener={dailySalesChart.animation}
+              />
+            </CardHeader>
+            <CardBody>
+              <h4 className={classes.cardTitle}>Volume of funds in each account type</h4>
+              <p className={classes.cardCategory}>
+                <span className={classes.successText}>
+                  <ArrowUpward className={classes.upArrowCardCategory} /> 55%
+                </span>{" "}
+                increase in funds in banks.
+              </p>
+            </CardBody>
+            <CardFooter chart>
+                <div className={classes.stats}>
+                <Update />
+                Just Updated
+              </div>
+            </CardFooter>
+          </Card>
+        </GridItem>
+        </GridContainer>
+        <GridContainer>
         <GridItem xs={12} sm={12} md={12}>
           <Transactions />
         </GridItem>
