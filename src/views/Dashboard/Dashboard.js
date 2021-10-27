@@ -48,25 +48,33 @@ const useStyles = makeStyles(styles);
 
 export default function Dashboard() {
   const classes = useStyles();
-  const [total_transactions, total_t] = useState('');
-  var url = "http://localhost:8000/api/total_transactions"
-  
-  const getTotal_transactions = () => {
-    axios.get(url).then((response) => {
-      console.log(response.data)
 
-      const TotalTransactions = response.data.total_transactions;
-      total_t(TotalTransactions);
-    })
-      .catch(error => console.error('Error: $(error)'));
-  }
+  const [total_transaction, setTransactions] = useState([])
+  const [total_volume, setVolume] = useState([])
+
+
   React.useEffect(() => {
-     getTotal_transactions();
+    var url = "http://localhost:8000/api/total_transactions"
+    axios.get(url).then((response) => {
+      setTransactions(response.data);
+    });
   }, []);
+
+
+  React.useEffect(() => {
+    var url = "http://localhost:8000/api/total_volume"
+    axios.get(url).then((response) => {
+      var total = response.data.total_volume
+      //remove trailing zeroes
+      var repl = total.replace(/^0+(\d)|(\d)0+$/gm, '$1$2');
+
+      setVolume(repl);
+    });
+  }, []);
+
+
   
-
-
-
+  
   return (
     <div>
       <div class="header">
@@ -82,7 +90,7 @@ export default function Dashboard() {
                 <Icon>content_copy</Icon>
               </CardIcon>
               <p className={classes.cardCategory}>Total Number Transactions</p>
-              <h3 className={classes.cardTitle}> 34
+              <h3 className={classes.cardTitle}> {total_transaction.total_transactions}
                 {/* <small>GB</small> */}
               </h3>
             </CardHeader>
@@ -101,7 +109,7 @@ export default function Dashboard() {
                 <Store />
               </CardIcon>
               <p className={classes.cardCategory}>Average Transaction Size</p>
-              <h3 className={classes.cardTitle}>R34,245</h3>
+              <h3 className={classes.cardTitle}>R34,24</h3>
             </CardHeader>
             <CardFooter stats>
             <div className={classes.stats}>
@@ -123,7 +131,7 @@ export default function Dashboard() {
                 <Store />
               </CardIcon>
               <p className={classes.cardCategory}>Volume in Circulation</p>
-              <h3 className={classes.cardTitle}>R34,245</h3>
+                  <h3 className={classes.cardTitle}>{total_volume }</h3>
             </CardHeader>
             <CardFooter stats>
             <div className={classes.stats}>
