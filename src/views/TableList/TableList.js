@@ -79,8 +79,8 @@ export default function TableList() {
               An "active" account relate to the number of transactions an account is involved as either a "Sender" or a "Receiver".
             </p>
           </CardHeader>
-          <CardBody>
-            <Table
+          <CardBody style={{ paddingTop : "0px"}}>
+            <Table style={{ marginTop : "0px"}}
               tableHeaderColor="primary"
               tableHead={["Address", "Transaction Involvement"]}
               tableData={[
