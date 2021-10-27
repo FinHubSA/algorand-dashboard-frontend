@@ -675,7 +675,7 @@ export default function Transactions({ ...rest }) {
         <GridItem xs={12} sm={12} md={12}>
           <Card>
             <CardHeader color="primary">
-              <h4>Transactions</h4>
+              <h4 style={{ marginTop: '5px', marginBottom: '5px' }}>Transactional Node Graph</h4>
             </CardHeader>
             <CardBody>
               <GridContainer>

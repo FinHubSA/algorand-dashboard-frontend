@@ -97,7 +97,7 @@ export default function TableList() {
                   "Doris Greene",
                   
                 ],
-                ["6", "Mason Porter"],
+               
               ]}
             />
           </CardBody>
