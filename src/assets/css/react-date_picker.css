@@ -12,6 +12,8 @@
 
 .input-container .react-datepicker-wrapper input {
   padding: 4px 12px;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  color: #3c4858;
 }
 
 .summary {
@@ -45,4 +47,9 @@
   align-items: center;
   padding-right: 10rem;
   padding-top: 2rem;
+}
+
+.date-text {
+  text-decoration: underline;
+  font-weight: 500;
 }

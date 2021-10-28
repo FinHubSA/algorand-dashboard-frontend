@@ -83,19 +83,37 @@ export default function Dashboard() {
     });
   }, []);
 
-   // define check-in and check-out state
-  const [checkInDate, setCheckInDate] = useState(null);
-  const [checkOutDate, setCheckOutDate] = useState(null);
+   // define start date and end date state
+  const [data_startdate_1, setCheckInDate] = useState(null);
+  const [data_enddate_1, setCheckOutDate] = useState(null);
+   const [data_startdate_2, setCheckInDate_2] = useState(null);
+  const [data_enddate_2, setCheckOutDate_2] = useState(null);
+   const [data_startdate_3, setCheckInDate_3] = useState(null);
+  const [data_enddate_3, setCheckOutDate_3] = useState(null);
 
-  // define handler change function on check-in date
+  // define handler change function on start date
   const handleCheckInDate = (date) => {
     setCheckInDate(date);
     setCheckOutDate(null);
   };
+    const handleCheckInDate_2 = (date) => {
+    setCheckInDate_2(date);
+    setCheckOutDate_2(null);
+    };
+    const handleCheckInDate_3 = (date) => {
+    setCheckInDate_3(date);
+    setCheckOutDate_3(null);
+  };
 
-  // define handler change function on check-out date
+  // define handler change function on start date
   const handleCheckOutDate = (date) => {
     setCheckOutDate(date);
+  };
+   const handleCheckOutDate_2 = (date) => {
+    setCheckOutDate_2(date);
+   };
+   const handleCheckOutDate_3 = (date) => {
+    setCheckOutDate_3(date);
   };
 
   
@@ -104,29 +122,27 @@ export default function Dashboard() {
       <div class="header">
         <h2 >Algorand Dashboard</h2>
       </div>
-      {/* <GridContainer>
-        <GridItem xs={12} sm={3} md={3}> */}
-      <div className="input-container">
-        <div>
-
-         <div className="data-reactpicker-styling">
-         {checkInDate && checkOutDate && (
+      <GridContainer>
+        <GridItem xs={12} sm={3} md={6}>
+            <div className="data-reactpicker-styling">
+         {data_startdate_1 && data_enddate_1 && (
           <div className={classes.summary}>
             <div >
                <h7>
-                Data from {moment(checkInDate).format("LL")} to{" "}
-                  {moment(checkOutDate).format("LL")}.
+                Data from <span className="date-text">{moment(data_startdate_1).format("LL")}</span> to{" "}
+                 <span className="date-text"> {moment(data_enddate_1).format("LL")}</span>.
               </h7>
               </div>
               </div>
             )}
           </div>
-        </div>
-        
+        </GridItem>
+        <GridItem xs={12} sm={3} md={6}>
+      <div className="input-container">
           <div>
             <label>From</label>
            <DatePicker 
-            selected={checkInDate}
+            selected={data_startdate_1}
             minDate={new Date()}
             onChange={handleCheckInDate}
              />
@@ -134,13 +150,14 @@ export default function Dashboard() {
         <div>
          <label>To</label>
          <DatePicker 
-           selected={checkOutDate}
-           minDate={checkInDate}
+           selected={data_enddate_1}
+           minDate={data_startdate_1}
             onChange={handleCheckOutDate}
           />
         </div>
         </div>
-      {/* </GridContainer> */}
+        </GridItem>
+      </GridContainer> 
       <GridContainer>
         <GridItem xs={12} sm={3} md={3}>
             <GridContainer>
@@ -230,7 +247,44 @@ export default function Dashboard() {
       <Divider style={{
     borderBottomWidth: "3px",
     marginBottom: "20px",
-    marginTop: "20px"}} />
+        marginTop: "20px"
+      }} />
+       <GridContainer>
+        <GridItem xs={12} sm={3} md={6}>
+            <div className="data-reactpicker-styling">
+         {data_startdate_2 && data_enddate_2 && (
+          <div className={classes.summary}>
+            <div >
+               <h7>
+                Data from <span className="date-text">{moment(data_startdate_2).format("LL")}</span> to{" "}
+                 <span className="date-text"> {moment(data_enddate_2).format("LL")}</span>.
+              </h7>
+              </div>
+              </div>
+            )}
+          </div>
+        </GridItem>
+        <GridItem xs={12} sm={3} md={6}>
+      <div className="input-container">
+          <div>
+            <label>From</label>
+           <DatePicker 
+            selected={data_startdate_2}
+            minDate={new Date()}
+            onChange={handleCheckInDate_2}
+             />
+        </div>
+        <div>
+         <label>To</label>
+         <DatePicker 
+           selected={data_enddate_2}
+           minDate={data_startdate_2}
+            onChange={handleCheckOutDate_2}
+          />
+        </div>
+        </div>
+        </GridItem>
+      </GridContainer> 
       <GridContainer>
         <GridItem xs={12} sm={12} md={8}>
           <FundsFlow />
@@ -267,7 +321,44 @@ export default function Dashboard() {
          <Divider style={{
     borderBottomWidth: "3px",
     marginBottom: "20px",
-    marginTop: "20px"}} />
+        marginTop: "20px"
+      }} />
+      <GridContainer>
+        <GridItem xs={12} sm={3} md={6}>
+            <div className="data-reactpicker-styling">
+         {data_startdate_3 && data_enddate_3 && (
+          <div className={classes.summary}>
+            <div >
+               <h7>
+                Data from <span className="date-text">{moment(data_startdate_3).format("LL")}</span> to{" "}
+                 <span className="date-text"> {moment(data_enddate_3).format("LL")}</span>.
+              </h7>
+              </div>
+              </div>
+            )}
+          </div>
+        </GridItem>
+        <GridItem xs={12} sm={3} md={6}>
+      <div className="input-container">
+          <div>
+            <label>From</label>
+           <DatePicker 
+            selected={data_startdate_3}
+            minDate={new Date()}
+            onChange={handleCheckInDate_3}
+             />
+        </div>
+        <div>
+         <label>To</label>
+         <DatePicker 
+           selected={data_enddate_3}
+           minDate={data_startdate_3}
+            onChange={handleCheckOutDate_3}
+          />
+        </div>
+        </div>
+        </GridItem>
+      </GridContainer> 
         <GridContainer>
         <GridItem xs={12} sm={12} md={12}>
           <Transactions />
