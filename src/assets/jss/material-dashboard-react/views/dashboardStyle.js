@@ -1,3 +1,4 @@
+import { NoEncryption } from "@material-ui/icons";
 import {
   successColor,
   whiteColor,
@@ -77,6 +78,19 @@ const dashboardStyle = {
       lineHeight: "1",
     },
   },
+  inputContainer: {
+      "display": "flex",
+      "flexDirection": "row",
+      "justifyContent": "center",
+      "alignItems": "center",
+  },
+ 
+  
+    summary : {
+      "fontSize": "18px"
+    }
+    
+  
 };
 
 export default dashboardStyle;

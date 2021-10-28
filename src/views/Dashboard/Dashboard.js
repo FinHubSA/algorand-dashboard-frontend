@@ -16,6 +16,16 @@ import Accessibility from "@material-ui/icons/Accessibility";
 import BugReport from "@material-ui/icons/BugReport";
 import Code from "@material-ui/icons/Code";
 import Cloud from "@material-ui/icons/Cloud";
+
+import ReactDOM from 'react-dom';
+import Divider from '@mui/material/Divider';
+
+//date picker
+import DatePicker from "react-datepicker";
+// import required css from library
+import "react-datepicker/dist/react-datepicker.css";
+import moment from "moment";
+
 // core components
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
@@ -43,6 +53,7 @@ import {
 } from "variables/charts.js";
 
 import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js";
+import "../../assets/css/react-date_picker.css";
 
 const useStyles = makeStyles(styles);
 
@@ -72,14 +83,64 @@ export default function Dashboard() {
     });
   }, []);
 
+   // define check-in and check-out state
+  const [checkInDate, setCheckInDate] = useState(null);
+  const [checkOutDate, setCheckOutDate] = useState(null);
 
-  
+  // define handler change function on check-in date
+  const handleCheckInDate = (date) => {
+    setCheckInDate(date);
+    setCheckOutDate(null);
+  };
+
+  // define handler change function on check-out date
+  const handleCheckOutDate = (date) => {
+    setCheckOutDate(date);
+  };
+
   
   return (
     <div>
       <div class="header">
         <h2 >Algorand Dashboard</h2>
       </div>
+      {/* <GridContainer>
+        <GridItem xs={12} sm={3} md={3}> */}
+      <div className="input-container">
+        <div>
+
+         <div className="data-reactpicker-styling">
+         {checkInDate && checkOutDate && (
+          <div className={classes.summary}>
+            <div >
+               <h7>
+                Data from {moment(checkInDate).format("LL")} to{" "}
+                  {moment(checkOutDate).format("LL")}.
+              </h7>
+              </div>
+              </div>
+            )}
+          </div>
+        </div>
+        
+          <div>
+            <label>From</label>
+           <DatePicker 
+            selected={checkInDate}
+            minDate={new Date()}
+            onChange={handleCheckInDate}
+             />
+        </div>
+        <div>
+         <label>To</label>
+         <DatePicker 
+           selected={checkOutDate}
+           minDate={checkInDate}
+            onChange={handleCheckOutDate}
+          />
+        </div>
+        </div>
+      {/* </GridContainer> */}
       <GridContainer>
         <GridItem xs={12} sm={3} md={3}>
             <GridContainer>
@@ -166,7 +227,10 @@ export default function Dashboard() {
         </GridItem>
        
       </GridContainer>
-      
+      <Divider style={{
+    borderBottomWidth: "3px",
+    marginBottom: "20px",
+    marginTop: "20px"}} />
       <GridContainer>
         <GridItem xs={12} sm={12} md={8}>
           <FundsFlow />
@@ -199,7 +263,11 @@ export default function Dashboard() {
             </CardFooter>
           </Card>
         </GridItem>
-        </GridContainer>
+      </GridContainer>
+         <Divider style={{
+    borderBottomWidth: "3px",
+    marginBottom: "20px",
+    marginTop: "20px"}} />
         <GridContainer>
         <GridItem xs={12} sm={12} md={12}>
           <Transactions />
