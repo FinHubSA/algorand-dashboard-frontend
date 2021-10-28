@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import * as d3 from "d3";
+import {nest as d3_nest} from 'd3-collection';
 import "../../assets/css/charts.css";
 import $ from "jquery";
 // @material-ui/core
@@ -142,8 +143,7 @@ export default function FundsFlow({ ...rest }) {
     // For example, households may deposit into banks and firms.
     // Here we want to add these 2 into 1 deposits payment
   
-    var payments_sub_totals = d3
-      .nest()
+    var payments_sub_totals = d3_nest()
       .key(function (d) {
         return d.account_type;
       })
@@ -213,8 +213,7 @@ export default function FundsFlow({ ...rest }) {
     });
   
     // Reduce to unique set of nodes
-    nodes = d3
-      .nest()
+    nodes = d3_nest()
       .key(function (d) {
         return d.name;
       })
@@ -290,7 +289,7 @@ export default function FundsFlow({ ...rest }) {
       .sort(function (a, b) {
         return b.dy - a.dy;
       })
-      .on("mouseover", function (d) {
+      .on("mouseover", function (event, d) {
         if (d.value != 0.0006) {
           var source = d.source.name.replace(/ payments| asset|/gi, "");
           var target = d.target.name.replace(/ payments| asset|/gi, "");
@@ -337,7 +336,7 @@ export default function FundsFlow({ ...rest }) {
         var name = d.name.replace(/ payments| asset|/gi, "");
         return (d.color = colors(name));
       })
-      .on("mouseover", function (d) {
+      .on("mouseover", function (event, d) {
         var text = "";
   
         node = d.name.replace(/ payments| asset|/gi, "");
@@ -362,7 +361,7 @@ export default function FundsFlow({ ...rest }) {
         var name = d.name.replace(/ payments| asset|/gi, "");
         d3.selectAll("." + name).style("stroke-opacity", 0.5);
       })
-      .on("mouseout", function (d) {
+      .on("mouseout", function (event, d) {
         $("#info").empty();
         d3.select(this).classed("highlight", false);
         d3.selectAll("path").style("stroke-opacity", 0.07);
@@ -565,8 +564,7 @@ export default function FundsFlow({ ...rest }) {
     }
   
     function computeNodeDepths(iterations) {
-      var nodesByBreadth = d3
-        .nest()
+      var nodesByBreadth = d3_nest()
         .key(function (d) {
           return d.x;
         })

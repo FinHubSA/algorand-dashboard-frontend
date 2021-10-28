@@ -183,114 +183,114 @@ const buttonStyle = {
         ", 0.2)",
     },
   },
-  banks: {
-    backgroundColor: groupColors["banks"],
+  bank: {
+    backgroundColor: groupColors["bank"],
     textAlign: "right",
     boxShadow:
       "0 2px 2px 0 rgba(" +
-      hexToRgb(groupColors["banks"]) +
+      hexToRgb(groupColors["bank"]) +
       ", 0.14), 0 3px 1px -2px rgba(" +
-      hexToRgb(groupColors["banks"]) +
+      hexToRgb(groupColors["bank"]) +
       ", 0.2), 0 1px 5px 0 rgba(" +
-      hexToRgb(groupColors["banks"]) +
+      hexToRgb(groupColors["bank"]) +
       ", 0.12)",
     "&:hover,&:focus": {
-      backgroundColor: groupColors["banks"],
+      backgroundColor: groupColors["bank"],
       boxShadow:
         "0 14px 26px -12px rgba(" +
-        hexToRgb(groupColors["banks"]) +
+        hexToRgb(groupColors["bank"]) +
         ", 0.42), 0 4px 23px 0px rgba(" +
         hexToRgb(blackColor) +
         ", 0.12), 0 8px 10px -5px rgba(" +
-        hexToRgb(groupColors["banks"]) +
+        hexToRgb(groupColors["bank"]) +
         ", 0.2)",
     },
   },
-  central_bank: {
-    backgroundColor: groupColors["central_bank"],
+  centralbank: {
+    backgroundColor: groupColors["centralbank"],
     boxShadow:
       "0 2px 2px 0 rgba(" +
-      hexToRgb(groupColors["central_bank"]) +
+      hexToRgb(groupColors["centralbank"]) +
       ", 0.14), 0 3px 1px -2px rgba(" +
-      hexToRgb(groupColors["central_bank"]) +
+      hexToRgb(groupColors["centralbank"]) +
       ", 0.2), 0 1px 5px 0 rgba(" +
-      hexToRgb(groupColors["central_bank"]) +
+      hexToRgb(groupColors["centralbank"]) +
       ", 0.12)",
     "&:hover,&:focus": {
-      backgroundColor: groupColors["central_bank"],
+      backgroundColor: groupColors["centralbank"],
       boxShadow:
         "0 14px 26px -12px rgba(" +
-        hexToRgb(groupColors["central_bank"]) +
+        hexToRgb(groupColors["centralbank"]) +
         ", 0.42), 0 4px 23px 0px rgba(" +
         hexToRgb(blackColor) +
         ", 0.12), 0 8px 10px -5px rgba(" +
-        hexToRgb(groupColors["central_bank"]) +
+        hexToRgb(groupColors["centralbank"]) +
         ", 0.2)",
     },
   },
-  firms: {
-    backgroundColor: groupColors["firms"],
+  firm: {
+    backgroundColor: groupColors["firm"],
     boxShadow:
       "0 2px 2px 0 rgba(" +
-      hexToRgb(groupColors["firms"]) +
+      hexToRgb(groupColors["firm"]) +
       ", 0.14), 0 3px 1px -2px rgba(" +
-      hexToRgb(groupColors["firms"]) +
+      hexToRgb(groupColors["firm"]) +
       ", 0.2), 0 1px 5px 0 rgba(" +
-      hexToRgb(groupColors["firms"]) +
+      hexToRgb(groupColors["firm"]) +
       ", 0.12)",
     "&:hover,&:focus": {
-      backgroundColor: groupColors["firms"],
+      backgroundColor: groupColors["firm"],
       boxShadow:
         "0 14px 26px -12px rgba(" +
-        hexToRgb(groupColors["firms"]) +
+        hexToRgb(groupColors["firm"]) +
         ", 0.42), 0 4px 23px 0px rgba(" +
         hexToRgb(blackColor) +
         ", 0.12), 0 8px 10px -5px rgba(" +
-        hexToRgb(groupColors["firms"]) +
+        hexToRgb(groupColors["firm"]) +
         ", 0.2)",
     },
   },
-  households: {
-    backgroundColor: groupColors["households"],
+  household: {
+    backgroundColor: groupColors["household"],
     boxShadow:
       "0 2px 2px 0 rgba(" +
-      hexToRgb(groupColors["households"]) +
+      hexToRgb(groupColors["household"]) +
       ", 0.14), 0 3px 1px -2px rgba(" +
-      hexToRgb(groupColors["households"]) +
+      hexToRgb(groupColors["household"]) +
       ", 0.2), 0 1px 5px 0 rgba(" +
-      hexToRgb(groupColors["households"]) +
+      hexToRgb(groupColors["household"]) +
       ", 0.12)",
     "&:hover,&:focus": {
-      backgroundColor: groupColors["households"],
+      backgroundColor: groupColors["household"],
       boxShadow:
         "0 14px 26px -12px rgba(" +
-        hexToRgb(groupColors["households"]) +
+        hexToRgb(groupColors["household"]) +
         ", 0.42), 0 4px 23px 0px rgba(" +
         hexToRgb(blackColor) +
         ", 0.12), 0 8px 10px -5px rgba(" +
-        hexToRgb(groupColors["households"]) +
+        hexToRgb(groupColors["household"]) +
         ", 0.2)",
     },
   },
-  lsps: {
-    backgroundColor: groupColors["lsps"],
+  lsp: {
+    backgroundColor: groupColors["lsp"],
     boxShadow:
       "0 2px 2px 0 rgba(" +
-      hexToRgb(groupColors["lsps"]) +
+      hexToRgb(groupColors["lsp"]) +
       ", 0.14), 0 3px 1px -2px rgba(" +
-      hexToRgb(groupColors["lsps"]) +
+      hexToRgb(groupColors["lsp"]) +
       ", 0.2), 0 1px 5px 0 rgba(" +
-      hexToRgb(groupColors["lsps"]) +
+      hexToRgb(groupColors["lsp"]) +
       ", 0.12)",
     "&:hover,&:focus": {
-      backgroundColor: groupColors["lsps"],
+      backgroundColor: groupColors["lsp"],
       boxShadow:
         "0 14px 26px -12px rgba(" +
-        hexToRgb(groupColors["lsps"]) +
+        hexToRgb(groupColors["lsp"]) +
         ", 0.42), 0 4px 23px 0px rgba(" +
         hexToRgb(blackColor) +
         ", 0.12), 0 8px 10px -5px rgba(" +
-        hexToRgb(groupColors["lsps"]) +
+        hexToRgb(groupColors["lsp"]) +
         ", 0.2)",
     },
   },
