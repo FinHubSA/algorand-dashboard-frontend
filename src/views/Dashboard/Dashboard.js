@@ -64,24 +64,34 @@ export default function Dashboard() {
   const [total_volume, setVolume] = useState([])
 
 
-  React.useEffect(() => {
-    var url = "http://localhost:8000/api/total_transactions"
-    axios.get(url).then((response) => {
-      setTransactions(response.data);
-    });
-  }, []);
+  // React.useEffect(() => {
+  //   var url = "http://localhost:8000/api/total_transactions"
+  //   axios.get(url).then((response) => {
+  //     setTransactions(response.data);
+  //   });
+  // }, []);
+   React.useEffect(() => {
+     getTransactions();
+     getVolume();
+    }, []);
 
 
-  React.useEffect(() => {
+    //api calls
+   const getTransactions = () => {
+     var url = "http://localhost:8000/api/total_transactions"
+     axios.get(url).then((response) => {
+       setTransactions(response.data);
+     });
+   }
+  const getVolume = () => {
     var url = "http://localhost:8000/api/total_volume"
     axios.get(url).then((response) => {
       var total = response.data.total_volume
       //remove trailing zeroes
       var repl = total.replace(/^0+(\d)|(\d)0+$/gm, '$1$2');
-
       setVolume(repl);
-    });
-  }, []);
+     });
+  }
 
    // define start date and end date state
   const [data_startdate_1, setCheckInDate] = useState(null);
@@ -107,9 +117,17 @@ export default function Dashboard() {
 
   // define handler change function on start date
   const handleCheckOutDate = (date) => {
+    //console.log(typeof(data_startdate_1));
+    console.log(typeof(date));
+    //console.log(date_2.target.value);
+    //const valueOfInput = date_1.format();
+    //const valueOfInput_2 = date_2.format();
+    //getTransactions()
+    //getVolume()
     setCheckOutDate(date);
   };
-   const handleCheckOutDate_2 = (date) => {
+  const handleCheckOutDate_2 = (date) => {
+     console.log(date)
     setCheckOutDate_2(date);
    };
    const handleCheckOutDate_3 = (date) => {
@@ -119,9 +137,12 @@ export default function Dashboard() {
   
   return (
     <div>
-      <div class="header">
-        <h2 >Algorand Dashboard</h2>
-      </div>
+      <div class="banner" >
+<div class="banner-content">
+<h2 class="banner-header"> Algorand Analysis Dashboard</h2>
+<h7 class ="banner-sub">Welcome to the Algorand blockchain analysis dashboard, developed by the Algorand-UCT Financial Innovation Hub.</h7>
+</div>
+</div>
       <GridContainer>
         <GridItem xs={12} sm={3} md={6}>
             <div className="data-reactpicker-styling">
@@ -147,12 +168,14 @@ export default function Dashboard() {
             onChange={handleCheckInDate}
              />
         </div>
-        <div>
+          <div>
          <label>To</label>
          <DatePicker 
            selected={data_enddate_1}
            minDate={data_startdate_1}
-            onChange={handleCheckOutDate}
+                onChange={(data_startdate_1, data_enddate_1) => {
+                  handleCheckOutDate(data_startdate_1, data_enddate_1);
+                }}
           />
         </div>
         </div>
@@ -163,9 +186,9 @@ export default function Dashboard() {
             <GridContainer>
             <GridItem xs={12}>
                <Card>
-            <CardHeader color="warning" stats icon>
-              <CardIcon color="warning">
-                <Icon>content_copy</Icon>
+            <CardHeader  color="warning" stats icon>
+              <CardIcon  color="warning" className="section_1">
+                <Icon className="section_1">content_copy</Icon>
               </CardIcon>
               <p className={classes.cardCategory}>Total Number Transactions</p>
               <h3 className={classes.cardTitle}> {total_transaction.total_transactions}
@@ -183,7 +206,7 @@ export default function Dashboard() {
             <GridItem xs={12}>
                 <Card>
             <CardHeader color="success" stats icon>
-              <CardIcon color="success">
+              <CardIcon className="section_1" color="success">
                 <Store />
               </CardIcon>
               <p className={classes.cardCategory}>Average Transaction Size</p>
@@ -205,7 +228,7 @@ export default function Dashboard() {
             <GridItem xs={12}>
                <Card>
             <CardHeader color="success" stats icon>
-              <CardIcon color="success">
+              <CardIcon className="section_1" color="success">
                 <Store />
               </CardIcon>
               <p className={classes.cardCategory}>Volume in Circulation</p>
@@ -222,7 +245,7 @@ export default function Dashboard() {
             <GridItem xs={12}>
                <Card>
             <CardHeader color="success" stats icon>
-              <CardIcon color="success">
+              <CardIcon className="section_1" color="success">
                 <Store />
               </CardIcon>
               <p className={classes.cardCategory}>Average Loan Size</p>
@@ -291,7 +314,7 @@ export default function Dashboard() {
         </GridItem>
         <GridItem xs={5} sm={12} md={4}>
           <Card chart>
-            <CardHeader color="success">
+            <CardHeader className="section_2" color="success">
               <ChartistGraph
                 className="ct-chart"
                 data={dailySalesChart.data}

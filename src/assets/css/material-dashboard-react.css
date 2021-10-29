@@ -508,3 +508,54 @@ footer ul li a:hover {
 * {
   letter-spacing: normal !important;
 }
+
+.banner {
+  background-color: #131033;
+  border-radius: 10px;
+  box-shadow: 0 5px 9px 0 rgb(0 0 0 / 25%);
+  border: 0px;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+}
+
+.banner-content {
+  justify-content: center;
+  text-align: center;
+}
+.banner-header {
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  margin-bottom: 0cm;
+  margin-top: 0cm;
+  color: #ffffff;
+  justify-content: center;
+  font-weight: 400;
+}
+
+.banner-sub {
+  color: #ffffff;
+  font-weight: 400;
+}
+
+.section_1 {
+  background: #27aae1 !important;
+}
+.section_1_title {
+  font-weight: 600 !important;
+}
+
+.section_2 {
+  background: #ee3a6b !important;
+}
+
+.section_3 {
+  background: #131033 !important;
+  font-weight: 500;
+}
+.section_3_title {
+  font-weight: 500;
+}
+
+.section_3_button {
+  background: #131033 !important;
+  font-weight: 500;
+}

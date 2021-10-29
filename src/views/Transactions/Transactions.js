@@ -702,8 +702,8 @@ export default function Transactions({ ...rest }) {
       <GridContainer>
         <GridItem xs={12} sm={12} md={12}>
           <Card>
-            <CardHeader color="primary">
-              <h4 style={{ marginTop: '5px', marginBottom: '5px' }}>Transactional Node Graph</h4>
+            <CardHeader className="section_3" color="primary">
+              <h4 style={{ marginTop: '5px', marginBottom: '5px', fontWeight: "500" }}>Transactional Node Graph</h4>
             </CardHeader>
             <CardBody>
               <GridContainer>
@@ -725,7 +725,8 @@ export default function Transactions({ ...rest }) {
                 </GridItem>
                 <GridItem xs={12} sm={6} md={2}>
                   <Button 
-                    color="primary" 
+                    color="primary"
+                    className="section_3"
                     round
                     onClick={() => {
                       var group_info = selected.current;
@@ -747,7 +748,8 @@ export default function Transactions({ ...rest }) {
                 </GridItem>
                 <GridItem xs={12} sm={6} md={2}>
                   <Button 
-                    color="primary" 
+                    color="primary"
+                    className="section_3"
                     round
                     onClick={() => {
                       var min = $("#min-range").val();

@@ -720,8 +720,8 @@ export default function FundsFlow({ ...rest }) {
     <GridContainer>
       <GridItem xs={12} sm={12} md={12}>
         <Card>
-          <CardHeader color="primary">
-            <h4 style={{ marginTop: '5px', marginBottom: '5px' }} >Counterparty Flow Of Funds</h4>
+          <CardHeader className="section_2" color="primary">
+            <h4 style={{ marginTop: '5px', marginBottom: '5px', fontWeight: "500" }} >Counterparty Flow Of Funds</h4>
           </CardHeader>
           <CardBody>
             <div style={{ overflowX: "hidden", overflowY: "hidden" }}>
