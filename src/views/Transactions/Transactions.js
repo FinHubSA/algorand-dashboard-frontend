@@ -1,13 +1,11 @@
 import React from "react";
-//import { Switch, Route, Redirect } from "react-router-dom";
 import * as d3 from "d3";
 import {nest as d3_nest} from 'd3-collection';
-//import { event as d3.event } from "d3-selection";
-//import { drag as d3.drag } from "d3-drag";
 import "../../assets/css/charts.css";
 import _ from "lodash";
 import $ from "jquery";
 import axios from "axios";
+import DateFnsUtils from '@date-io/date-fns';
 // @material-ui/core
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from '@material-ui/core/TextField';
@@ -20,6 +18,7 @@ import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 import {groupColors} from "assets/jss/material-dashboard-react.js";
+import DateRangePicker from "./DateRangePicker.js"
 
 const styles = {
   cardCategoryWhite: {
@@ -46,7 +45,7 @@ export default function Transactions({ ...rest }) {
   const classes = useStyles();
   const chartWidth = 1100
   const chartHeight = 430;
-  const groupBy = React.useRef();
+  const selectedAccountType = React.useRef();
   const [data, set_data] = React.useState([
     {
       key: "",
@@ -165,20 +164,9 @@ export default function Transactions({ ...rest }) {
     },
   ]);
 
-  React.useEffect(() => {
-    //get_data();
-    draw(data);
-  });
 
-  function get_data() {
-    var url = "http://localhost:8000/api/node_transactions"
-    axios.get(url).then((response) => {
-      console.log(response.data)
-      draw(response.data);
-    })
-    .catch(error => console.error('Error: $(error)'));
-  }
-
+  var selectedFromDate = new Date();
+  var selectedToDate = new Date();
   // Data for drawing
   var chart_data = {}; 
   var simulation;
@@ -195,6 +183,43 @@ export default function Transactions({ ...rest }) {
   var linkStrengthScale = d3.scaleLinear().range([0, 1]);
   var margin = { top: 0, right: 0, bottom: 0, left: 0 };
   var fmt = d3.format("0,.0f");
+
+  React.useEffect(() => {
+    get_data();
+    //draw(data);
+  });
+
+  function get_data() {
+    var url = "http://localhost:8000/api/node_transactions"
+
+    var fromDate = formatDate(selectedFromDate);
+    var toDate = formatDate(selectedToDate);
+    
+    var parameters = {"from":fromDate,"to":toDate};
+
+    axios.post(
+      url,
+      parameters
+    ).then((response) => {
+      console.log(response.data)
+      draw(response.data);
+    })
+    .catch(error => console.error('Error: $(error)'));
+  }
+
+  function formatDate(date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) 
+        month = '0' + month;
+    if (day.length < 2) 
+        day = '0' + day;
+
+    return [year, month, day].join('-');
+}
 
   function draw(data) {
     chart_data = _.cloneDeep(data);
@@ -688,18 +713,27 @@ export default function Transactions({ ...rest }) {
     return results;
   }
 
-  const selected = React.useRef();
-
   const handleSelectChange = event => {
-    console.log("drop **");
-    console.log(event.target.value);
-    //console.log(selectAcc.current)
-    selected.current = event.target.value;
+    selectedAccountType.current = event.target.value;
+  };
+
+  const handleFromDateChange = (date) => {
+    selectedFromDate = date;
+  };
+
+  const handleToDateChange = (date) => {
+    selectedToDate = date;
   };
 
   return (
     <div>
       <GridContainer>
+        <GridItem xs={12} sm={6} md={6}>
+          <DateRangePicker 
+            handleFromDateChange={handleFromDateChange} 
+            handleToDateChange={handleToDateChange}
+          />
+        </GridItem>
         <GridItem xs={12} sm={12} md={12}>
           <Card>
             <CardHeader className="section_3" color="primary">

@@ -347,42 +347,6 @@ export default function Dashboard() {
         marginTop: "20px"
       }} />
       <GridContainer>
-        <GridItem xs={12} sm={3} md={6}>
-            <div className="data-reactpicker-styling">
-         {data_startdate_3 && data_enddate_3 && (
-          <div className={classes.summary}>
-            <div >
-               <h7>
-                Data from <span className="date-text">{moment(data_startdate_3).format("LL")}</span> to{" "}
-                 <span className="date-text"> {moment(data_enddate_3).format("LL")}</span>.
-              </h7>
-              </div>
-              </div>
-            )}
-          </div>
-        </GridItem>
-        <GridItem xs={12} sm={3} md={6}>
-      <div className="input-container">
-          <div>
-            <label>From</label>
-           <DatePicker 
-            selected={data_startdate_3}
-            minDate={new Date()}
-            onChange={handleCheckInDate_3}
-             />
-        </div>
-        <div>
-         <label>To</label>
-         <DatePicker 
-           selected={data_enddate_3}
-           minDate={data_startdate_3}
-            onChange={handleCheckOutDate_3}
-          />
-        </div>
-        </div>
-        </GridItem>
-      </GridContainer> 
-        <GridContainer>
         <GridItem xs={12} sm={12} md={12}>
           <Transactions />
         </GridItem>
