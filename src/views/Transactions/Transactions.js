@@ -18,7 +18,7 @@ import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 import {groupColors} from "assets/jss/material-dashboard-react.js";
-import DateRangePicker from "./DateRangePicker.js"
+import DateRangePicker from "components/DateRange/DateRangePicker.js"
 
 const styles = {
   cardCategoryWhite: {
