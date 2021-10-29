@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-// react plugin for creating charts
-import ChartistGraph from "react-chartist";
 // @material-ui/core
 import { makeStyles } from "@material-ui/core/styles";
 import Icon from "@material-ui/core/Icon";
@@ -10,7 +8,6 @@ import Warning from "@material-ui/icons/Warning";
 import DateRange from "@material-ui/icons/DateRange";
 import LocalOffer from "@material-ui/icons/LocalOffer";
 import Update from "@material-ui/icons/Update";
-import ArrowUpward from "@material-ui/icons/ArrowUpward";
 import AccessTime from "@material-ui/icons/AccessTime";
 import Accessibility from "@material-ui/icons/Accessibility";
 import BugReport from "@material-ui/icons/BugReport";
@@ -45,12 +42,6 @@ import FundsFlow from "views/FundsFlow/FundsFlow.js";
 import TableList from "views/TableList/TableList.js";
 
 import { bugs, website, server } from "variables/general.js";
-
-import {
-  dailySalesChart,
-  emailsSubscriptionChart,
-  completedTasksChart,
-} from "variables/charts.js";
 
 import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js";
 import "../../assets/css/react-date_picker.css";
@@ -267,85 +258,25 @@ export default function Dashboard() {
         </GridItem>
        
       </GridContainer>
-      <Divider style={{
-    borderBottomWidth: "3px",
-    marginBottom: "20px",
-        marginTop: "20px"
-      }} />
-       <GridContainer>
-        <GridItem xs={12} sm={3} md={6}>
-            <div className="data-reactpicker-styling">
-         {data_startdate_2 && data_enddate_2 && (
-          <div className={classes.summary}>
-            <div >
-               <h7>
-                Data from <span className="date-text">{moment(data_startdate_2).format("LL")}</span> to{" "}
-                 <span className="date-text"> {moment(data_enddate_2).format("LL")}</span>.
-              </h7>
-              </div>
-              </div>
-            )}
-          </div>
-        </GridItem>
-        <GridItem xs={12} sm={3} md={6}>
-      <div className="input-container">
-          <div>
-            <label>From</label>
-           <DatePicker 
-            selected={data_startdate_2}
-            minDate={new Date()}
-            onChange={handleCheckInDate_2}
-             />
-        </div>
-        <div>
-         <label>To</label>
-         <DatePicker 
-           selected={data_enddate_2}
-           minDate={data_startdate_2}
-            onChange={handleCheckOutDate_2}
-          />
-        </div>
-        </div>
-        </GridItem>
-      </GridContainer> 
+      <Divider 
+        style={{
+          borderBottomWidth: "3px",
+          marginBottom: "20px",
+          marginTop: "20px"
+        }} 
+      />
       <GridContainer>
-        <GridItem xs={12} sm={12} md={8}>
+        <GridItem xs={12} sm={12} md={12}>
           <FundsFlow />
         </GridItem>
-        <GridItem xs={5} sm={12} md={4}>
-          <Card chart>
-            <CardHeader className="section_2" color="success">
-              <ChartistGraph
-                className="ct-chart"
-                data={dailySalesChart.data}
-                type="Line"
-                options={dailySalesChart.options}
-                listener={dailySalesChart.animation}
-              />
-            </CardHeader>
-            <CardBody>
-              <h4 className={classes.cardTitle}>Volume of funds in each account type</h4>
-              <p className={classes.cardCategory}>
-                <span className={classes.successText}>
-                  <ArrowUpward className={classes.upArrowCardCategory} /> 55%
-                </span>{" "}
-                increase in funds in banks.
-              </p>
-            </CardBody>
-            <CardFooter chart>
-                <div className={classes.stats}>
-                <Update />
-                Just Updated
-              </div>
-            </CardFooter>
-          </Card>
-        </GridItem>
       </GridContainer>
-         <Divider style={{
-    borderBottomWidth: "3px",
-    marginBottom: "20px",
-        marginTop: "20px"
-      }} />
+        <Divider 
+          style={{
+            borderBottomWidth: "3px",
+            marginBottom: "20px",
+            marginTop: "20px"
+          }} 
+        />
       <GridContainer>
         <GridItem xs={12} sm={12} md={12}>
           <Transactions />
