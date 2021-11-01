@@ -763,10 +763,10 @@ export default function Transactions({ ...rest }) {
                     className="section_3"
                     round
                     onClick={() => {
-                      var group_info = selected.current;
+                      var group_info = selectedAccountType.current;
                       var group_range = "All";
 
-                      var grouped = group_data(group_by_account_type, [selected.current], group_info, group_range);
+                      var grouped = group_data(group_by_account_type, [selectedAccountType.current], group_info, group_range);
                       if (grouped) {
                         refresh_data();
                       }
@@ -789,10 +789,10 @@ export default function Transactions({ ...rest }) {
                       var min = $("#min-range").val();
                       var max = $("#max-range").val();
 
-                      var group_info = selected.current;
+                      var group_info = selectedAccountType.current;
                       var group_range = min+" - "+max;
 
-                      var grouped = group_data(group_by_range, [selected.current, min, max], group_info, group_range);
+                      var grouped = group_data(group_by_range, [selectedAccountType.current, min, max], group_info, group_range);
                       if (grouped) {
                         refresh_data();
                       }
