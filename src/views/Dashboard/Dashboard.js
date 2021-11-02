@@ -37,8 +37,9 @@ import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 import axios from "axios";
 
-import Transactions from "views/Transactions/Transactions.js";
+import Statistics from "views/Statistics/Statistics.js";
 import FundsFlow from "views/FundsFlow/FundsFlow.js";
+import Transactions from "views/Transactions/Transactions.js";
 import TableList from "views/TableList/TableList.js";
 
 import { bugs, website, server } from "variables/general.js";
@@ -135,128 +136,9 @@ export default function Dashboard() {
 </div>
 </div>
       <GridContainer>
-        <GridItem xs={12} sm={3} md={6}>
-            <div className="data-reactpicker-styling">
-         {data_startdate_1 && data_enddate_1 && (
-          <div className={classes.summary}>
-            <div >
-               <h7>
-                Data from <span className="date-text">{moment(data_startdate_1).format("LL")}</span> to{" "}
-                 <span className="date-text"> {moment(data_enddate_1).format("LL")}</span>.
-              </h7>
-              </div>
-              </div>
-            )}
-          </div>
+        <GridItem xs={12} sm={12} md={12}>
+          <Statistics />
         </GridItem>
-        <GridItem xs={12} sm={3} md={6}>
-      <div className="input-container">
-          <div>
-            <label>From</label>
-           <DatePicker 
-            selected={data_startdate_1}
-            minDate={new Date()}
-            onChange={handleCheckInDate}
-             />
-        </div>
-          <div>
-         <label>To</label>
-         <DatePicker 
-           selected={data_enddate_1}
-           minDate={data_startdate_1}
-                onChange={(data_startdate_1, data_enddate_1) => {
-                  handleCheckOutDate(data_startdate_1, data_enddate_1);
-                }}
-          />
-        </div>
-        </div>
-        </GridItem>
-      </GridContainer> 
-      <GridContainer>
-        <GridItem xs={12} sm={3} md={3}>
-            <GridContainer>
-            <GridItem xs={12}>
-               <Card>
-            <CardHeader  color="warning" stats icon>
-              <CardIcon  color="warning" className="section_1">
-                <Icon className="section_1">content_copy</Icon>
-              </CardIcon>
-              <p className={classes.cardCategory}>Total Number Transactions</p>
-              <h3 className={classes.cardTitle}> {total_transaction.total_transactions}
-                {/* <small>GB</small> */}
-              </h3>
-            </CardHeader>
-            <CardFooter stats>
-             <div className={classes.stats}>
-                <Update />
-                Just Updated
-              </div>
-            </CardFooter>
-          </Card>
-            </GridItem>
-            <GridItem xs={12}>
-                <Card>
-            <CardHeader color="success" stats icon>
-              <CardIcon className="section_1" color="success">
-                <Store />
-              </CardIcon>
-              <p className={classes.cardCategory}>Average Transaction Size</p>
-              <h3 className={classes.cardTitle}>R34,24</h3>
-            </CardHeader>
-            <CardFooter stats>
-            <div className={classes.stats}>
-                <Update />
-                Just Updated
-              </div>
-            </CardFooter>
-          </Card>
-            </GridItem>
-          </GridContainer>
-         
-        </GridItem>
-        <GridItem xs={12} sm={3} md={3}>
-          <GridContainer>
-            <GridItem xs={12}>
-               <Card>
-            <CardHeader color="success" stats icon>
-              <CardIcon className="section_1" color="success">
-                <Store />
-              </CardIcon>
-              <p className={classes.cardCategory}>Volume in Circulation</p>
-                  <h3 className={classes.cardTitle}>{total_volume }</h3>
-            </CardHeader>
-            <CardFooter stats>
-            <div className={classes.stats}>
-                <Update />
-                Just Updated
-              </div>
-            </CardFooter>
-          </Card>
-           </GridItem>
-            <GridItem xs={12}>
-               <Card>
-            <CardHeader color="success" stats icon>
-              <CardIcon className="section_1" color="success">
-                <Store />
-              </CardIcon>
-              <p className={classes.cardCategory}>Average Loan Size</p>
-              <h3 className={classes.cardTitle}>R34,245</h3>
-            </CardHeader>
-            <CardFooter stats>
-            <div className={classes.stats}>
-                <Update />
-                Just Updated
-              </div>
-            </CardFooter>
-          </Card>
-            </GridItem>
-          </GridContainer>
-         
-        </GridItem>
-        <GridItem xs={12} sm={3} md={5}>
-         <TableList/>
-        </GridItem>
-       
       </GridContainer>
       <Divider 
         style={{
