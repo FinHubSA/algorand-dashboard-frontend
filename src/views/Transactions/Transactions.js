@@ -46,6 +46,7 @@ export default function Transactions({ ...rest }) {
   const chartWidth = 1100
   const chartHeight = 430;
   const selectedAccountType = React.useRef();
+  const selectedAccountTypeRange = React.useRef();
   const [data, set_data] = React.useState([
     {
       key: "",
@@ -183,6 +184,9 @@ export default function Transactions({ ...rest }) {
   var linkStrengthScale = d3.scaleLinear().range([0, 1]);
   var margin = { top: 0, right: 0, bottom: 0, left: 0 };
   var fmt = d3.format("0,.0f");
+
+  // Start with transactions a year agao
+  selectedFromDate.setFullYear(selectedFromDate.getFullYear() - 1);
 
   React.useEffect(() => {
     get_data();
@@ -714,8 +718,12 @@ export default function Transactions({ ...rest }) {
     return results;
   }
 
-  const handleSelectChange = event => {
+  const handleAccountTypeSelectChange = event => {
     selectedAccountType.current = event.target.value;
+  };
+
+  const handleAccountTypeRangeSelectChange = event => {
+    selectedAccountTypeRange.current = event.target.value;
   };
 
   const handleFromDateChange = (date) => {
@@ -726,6 +734,10 @@ export default function Transactions({ ...rest }) {
     selectedToDate = date;
   };
 
+  const handleGetRange = () => {
+    get_data();
+  };
+
   return (
     <div>
       <GridContainer>
@@ -733,6 +745,9 @@ export default function Transactions({ ...rest }) {
           <DateRangePicker 
             handleFromDateChange={handleFromDateChange} 
             handleToDateChange={handleToDateChange}
+            handleGetRange={handleGetRange}
+            selectedFromDate={selectedFromDate}
+            selectedToDate={selectedToDate}
           />
         </GridItem>
         <GridItem xs={12} sm={12} md={12}>
@@ -749,7 +764,7 @@ export default function Transactions({ ...rest }) {
                     label="Account Type"
                     id='account_type_select'
                     select
-                    onChange={handleSelectChange}
+                    onChange={handleAccountTypeSelectChange}
                   >
                     <MenuItem value="household">Households</MenuItem>
                     <MenuItem value="bank">Banks</MenuItem>
@@ -767,13 +782,29 @@ export default function Transactions({ ...rest }) {
                       var group_info = selectedAccountType.current;
                       var group_range = "All";
 
-                      var grouped = group_data(group_by_account_type, [selectedAccountType.current], group_info, group_range);
+                      var grouped = group_data(group_by_account_type, [group_info], group_info, group_range);
                       if (grouped) {
                         refresh_data();
                       }
                     }}>
-                    Group All
+                    Group
                   </Button>
+                </GridItem>
+                <GridItem xs={12} sm={6} md={2}>
+                  <TextField
+                    style={{margin:"5px", width:"100%"}}
+                    variant="outlined"
+                    label="Account Type"
+                    id='account_type_range_select'
+                    select
+                    onChange={handleAccountTypeRangeSelectChange}
+                  >
+                    <MenuItem value="household">Households</MenuItem>
+                    <MenuItem value="bank">Banks</MenuItem>
+                    <MenuItem value="firm">Firms</MenuItem>
+                    <MenuItem value="lsp">License Service Providers</MenuItem>
+                    <MenuItem value="centralbank">Central Bank</MenuItem>
+                  </TextField>
                 </GridItem>
                 <GridItem xs={12} sm={6} md={2}>
                   <TextField style={{margin:"5px"}} id="min-range" label="Min Balance" variant="outlined" />
@@ -790,15 +821,15 @@ export default function Transactions({ ...rest }) {
                       var min = $("#min-range").val();
                       var max = $("#max-range").val();
 
-                      var group_info = selectedAccountType.current;
+                      var group_info = selectedAccountTypeRange.current;
                       var group_range = min+" - "+max;
 
-                      var grouped = group_data(group_by_range, [selectedAccountType.current, min, max], group_info, group_range);
+                      var grouped = group_data(group_by_range, [group_info, min, max], group_info, group_range);
                       if (grouped) {
                         refresh_data();
                       }
                     }}>
-                    Group Range
+                    Group
                   </Button>
                 </GridItem>
                 <GridItem xs={12} sm={12} md={12}>
