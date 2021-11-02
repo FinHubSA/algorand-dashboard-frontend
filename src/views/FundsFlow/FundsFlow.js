@@ -83,12 +83,15 @@ export default function FundsFlow({ ...rest }) {
 
   var selectedFromDate = new Date();
   var selectedToDate = new Date();
-  var chart_data = {}; 
+  var chart_data = []; 
   var svg;
   var nodes = [];
   var links = [];
   var linksX = [];
   var fmt = d3.format("0,.0f");
+
+  // Start with transactions a year agao
+  selectedFromDate.setFullYear(selectedFromDate.getFullYear() - 1);
 
   React.useEffect(() => {
     //draw(data);
@@ -97,7 +100,16 @@ export default function FundsFlow({ ...rest }) {
 
   function get_data() {
     var url = "http://localhost:8000/api/account_type_payments_receipts"
-    axios.get(url).then((response) => {
+
+    var fromDate = formatDate(selectedFromDate);
+    var toDate = formatDate(selectedToDate);
+    
+    var parameters = {"from":fromDate,"to":toDate};
+
+    axios.post(
+      url,
+      parameters
+    ).then((response) => {
       console.log("ff **");
       console.log(response.data)
       draw(response.data);
@@ -105,6 +117,20 @@ export default function FundsFlow({ ...rest }) {
     .catch(error => console.error('Error: $(error)'));
   }
 
+  function formatDate(date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) 
+        month = '0' + month;
+    if (day.length < 2) 
+        day = '0' + day;
+
+    return [year, month, day].join('-');
+  }
+  
   function draw(data) {
     chart_data = _.cloneDeep(data);
 
@@ -127,6 +153,10 @@ export default function FundsFlow({ ...rest }) {
   }
 
   function prepare_data() {
+    nodes = [];
+    links = [];
+    linksX = [];
+    
     //We are creating a chart like this:
     //Total Payments  -> Instrument -> Receipts
 
@@ -724,12 +754,19 @@ export default function FundsFlow({ ...rest }) {
     selectedToDate = date;
   };
 
+  const handleGetRange = () => {
+    get_data();
+  };
+
   return (
     <GridContainer>
       <GridItem xs={12} sm={6} md={6}>
         <DateRangePicker 
           handleFromDateChange={handleFromDateChange} 
           handleToDateChange={handleToDateChange}
+          handleGetRange={handleGetRange}
+          selectedFromDate={selectedFromDate}
+          selectedToDate={selectedToDate}
         />
       </GridItem>
       <GridItem xs={12} sm={12} md={8}>

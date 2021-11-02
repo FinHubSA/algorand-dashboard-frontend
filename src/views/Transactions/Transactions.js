@@ -223,7 +223,7 @@ export default function Transactions({ ...rest }) {
         day = '0' + day;
 
     return [year, month, day].join('-');
-}
+  }
 
   function draw(data) {
     chart_data = _.cloneDeep(data);
