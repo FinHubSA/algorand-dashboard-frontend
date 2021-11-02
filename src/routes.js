@@ -29,6 +29,7 @@ import LanguageIcon from "@material-ui/icons/Language";
 import Transactions from "views/Transactions/Transactions.js";
 import FundsFlow from "views/FundsFlow/FundsFlow.js";
 import DashboardPage from "views/Dashboard/Dashboard.js";
+import FundsTotals from "views/FundsTotals/FundsTotals.js";
 import UserProfile from "views/UserProfile/UserProfile.js";
 import TableList from "views/TableList/TableList.js";
 import Typography from "views/Typography/Typography.js";
@@ -64,20 +65,20 @@ const dashboardRoutes = [
     component: FundsFlow,
     layout: "/admin",
   },
+  {
+    path: "/table",
+    name: "Funds Totals",
+    rtlName: "قائمة الجدول",
+    icon: "content_paste",
+    component: FundsTotals,
+    layout: "/admin",
+  },
   /*{
     path: "/user",
     name: "User Profile",
     rtlName: "ملف تعريفي للمستخدم",
     icon: PersonIcon,
     component: UserProfile,
-    layout: "/admin",
-  },
-  {
-    path: "/table",
-    name: "Table List",
-    rtlName: "قائمة الجدول",
-    icon: "content_paste",
-    component: TableList,
     layout: "/admin",
   },
   {

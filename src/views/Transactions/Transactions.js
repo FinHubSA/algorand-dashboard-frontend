@@ -542,6 +542,7 @@ export default function Transactions({ ...rest }) {
     }
     return 12;
   }
+  
   function node_color(d) {
     var acc_type = d.account_type.split(" ").join("_").toLowerCase();
     return groupColors[acc_type];
