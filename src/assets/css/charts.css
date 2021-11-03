@@ -213,7 +213,7 @@ h5 {
   stroke-opacity: 0.5;
 }
 
-#info {
+.chart-info {
   padding-top: 5px;
   height: 50px;
   color: #636363;
@@ -554,7 +554,7 @@ h5 {
     line-height: 1.42857143;
     vertical-align: middle;
   }
-  #info {
+  .chart-info {
     padding-top: 5px;
     height: 30px;
     color: #636363;

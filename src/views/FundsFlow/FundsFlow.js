@@ -26,11 +26,6 @@ const useStyles = makeStyles(styles);
 
 export default function FundsFlow({ ...rest }) {
   const classes = useStyles();
-  const chartWidth = 700;
-  const chartHeight = 300;
-  const margin = { top: 20, right: 10, bottom: 50, left: 10 };
-  const width = chartWidth - margin.left - margin.right;
-  const height = chartHeight - margin.top - margin.bottom;
   const node_labels = {
     "Bank": "Bank",
     "CentralBank": "CentralBank",
@@ -81,10 +76,13 @@ export default function FundsFlow({ ...rest }) {
     }
   ]);
 
+  var net_funds = {}
   var selectedFromDate = new Date();
   var selectedToDate = new Date();
   var chart_data = []; 
-  var svg;
+  var bar_chart_data = []
+  var sankey_svg;
+  var bar_svg;
   var nodes = [];
   var links = [];
   var linksX = [];
@@ -134,16 +132,106 @@ export default function FundsFlow({ ...rest }) {
   function draw(data) {
     chart_data = _.cloneDeep(data);
 
-    initialize_chart();
     prepare_data();
-    initialize_sankey();
+    initialize_sankey_chart(700, 330, { top: 20, right: 10, bottom: 30, left: 10 });
+    initialize_bar_chart(300, 370, { top: 20, right: 10, bottom: 30, left: 50 });
   }
 
-  function initialize_chart() {
+  function initialize_bar_chart(width, height, margin) {
+    var width = width - margin.left - margin.right;
+    var height = height - margin.top - margin.bottom;
+
+    d3.select(".vis-barchart > *").remove();
+    
+    bar_svg = d3.select('.vis-barchart').append('svg')
+      .attr('width',width + margin.left + margin.right)
+      .attr('height',height + margin.top + margin.bottom)
+      .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    // format the data
+    bar_chart_data.forEach(function(d) {
+      d.value = parseInt(d.value);
+    });
+
+    // Scale the range of the data in the domains
+    let x = d3.scaleBand()
+      .range([0, width])
+      .padding(0.1);
+    let y = d3.scaleLinear()
+      .range([height, 0]);
+    x.domain(bar_chart_data.map(function(d) {return d.account_type;}));
+    y.domain([d3.min(bar_chart_data, function(d) {return d.value; }), d3.max(bar_chart_data, function(d) {return d.value; })]);
+
+    // append the rectangles for the bar chart
+    bar_svg.selectAll(".bar")
+      .data(bar_chart_data)
+      .enter().append("rect")
+      .attr("fill",bar_color)
+      .attr("x", function(d) { return x(d.account_type); })
+      .attr("width", x.bandwidth())
+      .attr("y", function(d) { return y(Math.max(0, d.value)); })
+      .attr("height", function(d) { return Math.abs(y(d.value) - y(0)); })
+      .on("mouseover", function (event, d) {
+          d3.select("#bar-info").html(
+            "<em> R " +
+            fmt(d.value) +
+            "</em>"
+          );
+          d3.select(this).style("fill-opacity", 0.5);
+      })
+      .on("mouseout", function (event, d) {
+        $("#bar-info").empty();
+        d3.select(this).style("fill-opacity", 1);
+      });
+
+    // add the x Axis
+    bar_svg.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x));
+
+    // add the y Axis
+    bar_svg.append("g")
+      .call(
+          d3.axisLeft(y)
+          .tickFormat(function(d){
+              return "R "+number_formatter(d, 3);
+          }).ticks(10)
+      );
+  }
+
+  function bar_color(d) {
+    var acc_type = d.account_type.split(" ").join("_").toLowerCase();
+    return groupColors[acc_type];
+  }
+
+  function number_formatter(num, digits) {
+    const lookup = [
+      { value: 1, symbol: "" },
+      { value: 1e3, symbol: "k" },
+      { value: 1e6, symbol: "M" },
+      { value: 1e9, symbol: "B" },
+      { value: 1e12, symbol: "T" },
+      { value: 1e15, symbol: "P" },
+      { value: 1e18, symbol: "E" }
+    ];
+    const rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
+    var item = lookup.slice().reverse().find(function(item) {
+      return Math.abs(num) >= item.value;
+    });
+    return item ? (num / item.value).toFixed(digits).replace(rx, "$1") + item.symbol : "0";
+  }
+
+
+  function initialize_sankey_chart(width, height, margin) {
+    
+    var width = width - margin.left - margin.right;
+    var height = height - margin.top - margin.bottom;
+
     d3.select(".vis-sankeychart > *").remove();
     
-    //create svg
-    svg = d3
+    //create sankey_svg
+    sankey_svg = d3
       .select("#sankeychart")
       .append("svg")
       .attr("width", width + margin.left + margin.right)
@@ -154,7 +242,7 @@ export default function FundsFlow({ ...rest }) {
     var dataL = -620;
     var offset = 145;
 
-    var legend = svg
+    var legend = sankey_svg
       .selectAll(".legend")
       .data(Object.keys(groupColors))
       .enter()
@@ -163,7 +251,7 @@ export default function FundsFlow({ ...rest }) {
       .attr("transform", function (d, i) {
           var newdataL = dataL
           dataL +=  d.length + offset
-          return "translate(" + (newdataL) + ",250)"
+          return "translate(" + (newdataL) + ",290)"
       });
 
     legend
@@ -183,6 +271,142 @@ export default function FundsFlow({ ...rest }) {
         return d;
       })
       .on("click", function (event, d) {}); 
+  
+    // Set the sankey diagram properties
+    var sankey = d3sankey()
+      .nodeWidth(20)
+      .nodePadding(7)
+      .size([width, height])
+      .nodes(nodes)
+      .links(linksX)
+      .layout(32);
+  
+    var path = sankey.link();
+  
+    // add in the links
+    var link = sankey_svg
+      .append("g")
+      .selectAll(".link")
+      .data(linksX)
+      .enter()
+      .append("path")
+      .attr("class", function (d) {
+        return "link" + " " + d.liaIns + " " + d.color;
+      })
+      .attr("d", path)
+      .style("stroke-width", function (d) {
+        if (d.dy > 0.0006) {
+          return Math.max(1, d.dy);
+        } else {
+          return 0;
+        }
+      })
+      .style("stroke", function (d) {
+        var name = d.color.toLowerCase();
+        return groupColors[name];
+      })
+      .sort(function (a, b) {
+        return b.dy - a.dy;
+      })
+      .on("mouseover", function (event, d) {
+        if (d.value != 0.0006) {
+          var source = d.source.name.replace(/ payments| receipts|/gi, "");
+          var target = d.target.name.replace(/ payments| receipts|/gi, "");
+  
+          d3.select("#info").html(
+            node_labels[source] +
+              " &#8594; " +
+              node_labels[target] +
+              ": <em> R " +
+              fmt(d.value) +
+              " </em>"
+          );
+  
+          d3.select(this).style("stroke-opacity", 0.5);
+  
+          d3.selectAll("." + d.liaIns).style("stroke-opacity", 0.5);
+        }
+      })
+      .on("mouseout", function (event, d) {
+        $("#info").empty();
+        d3.selectAll("path").style("stroke-opacity", 0.07);
+      });
+  
+    // add in the nodes
+    var node = sankey_svg
+      .append("g")
+      .selectAll(".node")
+      .data(nodes)
+      .enter()
+      .append("g")
+      .attr("class", "node")
+      .attr("transform", function (d) {
+        return "translate(" + d.x + "," + d.y + ")";
+      });
+  
+    // add the rectangles for the nodes
+    node
+      .append("rect")
+      .attr("height", function (d) {
+        return d.dy;
+      })
+      .attr("width", sankey.nodeWidth())
+      .style("fill", function (d) {
+        var name = d.name.replace(/ payments| receipts|/gi, "").toLowerCase();
+        return (d.color = groupColors[name]);
+      })
+      .on("mouseover", function (event, d) {
+        var text = "";
+  
+        node = d.name.replace(/ payments| receipts|/gi, "");
+  
+        if (d.name.substr(d.name.lastIndexOf(" rec") + 1) == "receipts") {
+          text = "receipts";
+        } else if (d.name.substr(d.name.lastIndexOf(" lia") + 1) == "payments") {
+          text = "payments";
+        } else {
+          text = "";
+        }
+  
+        d3.select("#info").html(
+            node_labels[node] +
+            " " +
+            text +
+            ": <em> R " +
+            fmt(d.value) +
+            " </em>"
+        );
+        d3.select(this).classed("highlight", true);
+        var name = d.name.replace(/ payments| receipts|/gi, "");
+        d3.selectAll("." + name).style("stroke-opacity", 0.5);
+      })
+      .on("mouseout", function (event, d) {
+        $("#info").empty();
+        d3.select(this).classed("highlight", false);
+        d3.selectAll("path").style("stroke-opacity", 0.07);
+      });
+  
+    // add in the title for the nodes
+    node
+      .append("text")
+      .attr("x", -6)
+      .attr("y", function (d) {
+        return d.dy / 2;
+      })
+      .attr("dy", ".35em")
+      .attr("text-anchor", "end")
+      .attr("transform", null)
+      .text(function (d) {
+        var name = d.name.replace("_", "&");
+        var receipts = name.replace(" receipts", "");
+        var payments = receipts.replace(" payments", "");
+        return payments;
+      })
+      .filter(function (d) {
+        return d.x < width / 2;
+      })
+      .attr("x", 6 + sankey.nodeWidth())
+      .attr("text-anchor", "start");
   }
 
   function prepare_data() {
@@ -263,8 +487,11 @@ export default function FundsFlow({ ...rest }) {
             d.instrument_type + "_" + d.instrument_type + "_" + d.receiver_type,
         });
       }
+      push_net_data(d);
     });
-  
+    
+    prepare_net_data();
+
     // Reduce to unique set of nodes
     nodes = d3_nest()
       .key(function (d) {
@@ -304,143 +531,27 @@ export default function FundsFlow({ ...rest }) {
     });
   }
 
-  function initialize_sankey() {
-    // Set the sankey diagram properties
-    var sankey = d3sankey()
-      .nodeWidth(20)
-      .nodePadding(7)
-      .size([width, height])
-      .nodes(nodes)
-      .links(linksX)
-      .layout(32);
-  
-    var path = sankey.link();
-  
-    // add in the links
-    var link = svg
-      .append("g")
-      .selectAll(".link")
-      .data(linksX)
-      .enter()
-      .append("path")
-      .attr("class", function (d) {
-        return "link" + " " + d.liaIns + " " + d.color;
-      })
-      .attr("d", path)
-      .style("stroke-width", function (d) {
-        if (d.dy > 0.0006) {
-          return Math.max(1, d.dy);
-        } else {
-          return 0;
-        }
-      })
-      .style("stroke", function (d) {
-        var name = d.color.toLowerCase();
-        return groupColors[name];
-      })
-      .sort(function (a, b) {
-        return b.dy - a.dy;
-      })
-      .on("mouseover", function (event, d) {
-        if (d.value != 0.0006) {
-          var source = d.source.name.replace(/ payments| receipts|/gi, "");
-          var target = d.target.name.replace(/ payments| receipts|/gi, "");
-  
-          d3.select("#info").html(
-            node_labels[source] +
-              " &#8594; " +
-              node_labels[target] +
-              ": <em> R " +
-              fmt(d.value) +
-              " </em>"
-          );
-  
-          d3.select(this).style("stroke-opacity", 0.5);
-  
-          d3.selectAll("." + d.liaIns).style("stroke-opacity", 0.5);
-        }
-      })
-      .on("mouseout", function (event, d) {
-        $("#info").empty();
-        d3.selectAll("path").style("stroke-opacity", 0.07);
-      });
-  
-    // add in the nodes
-    var node = svg
-      .append("g")
-      .selectAll(".node")
-      .data(nodes)
-      .enter()
-      .append("g")
-      .attr("class", "node")
-      .attr("transform", function (d) {
-        return "translate(" + d.x + "," + d.y + ")";
-      });
-  
-    // add the rectangles for the nodes
-    node
-      .append("rect")
-      .attr("height", function (d) {
-        return d.dy;
-      })
-      .attr("width", sankey.nodeWidth())
-      .style("fill", function (d) {
-        var name = d.name.replace(/ payments| receipts|/gi, "").toLowerCase();
-        return (d.color = groupColors[name]);
-      })
-      .on("mouseover", function (event, d) {
-        var text = "";
-  
-        node = d.name.replace(/ payments| receipts|/gi, "");
-  
-        if (d.name.substr(d.name.lastIndexOf(" rec") + 1) == "receipts") {
-          text = "receipts";
-        } else if (d.name.substr(d.name.lastIndexOf(" lia") + 1) == "payments") {
-          text = "payments";
-        } else {
-          text = "";
-        }
-  
-        d3.select("#info").html(
-            node_labels[node] +
-            " " +
-            text +
-            ": <em> R " +
-            fmt(d.value) +
-            " </em>"
-        );
-        d3.select(this).classed("highlight", true);
-        var name = d.name.replace(/ payments| receipts|/gi, "");
-        d3.selectAll("." + name).style("stroke-opacity", 0.5);
-      })
-      .on("mouseout", function (event, d) {
-        $("#info").empty();
-        d3.select(this).classed("highlight", false);
-        d3.selectAll("path").style("stroke-opacity", 0.07);
-      });
-  
-    // add in the title for the nodes
-    node
-      .append("text")
-      .attr("x", -6)
-      .attr("y", function (d) {
-        return d.dy / 2;
-      })
-      .attr("dy", ".35em")
-      .attr("text-anchor", "end")
-      .attr("transform", null)
-      .text(function (d) {
-        var name = d.name.replace("_", "&");
-        var receipts = name.replace(" receipts", "");
-        var payments = receipts.replace(" payments", "");
-        return payments;
-      })
-      .filter(function (d) {
-        return d.x < width / 2;
-      })
-      .attr("x", 6 + sankey.nodeWidth())
-      .attr("text-anchor", "start");
-  };
+  function push_net_data(d){
+    var value = parseFloat(d.value)
+
+    if (d.sender_type in net_funds){
+      net_funds[d.sender_type] = net_funds[d.sender_type] - value;
+    }else{
+      net_funds[d.sender_type] = -1 * value
+    }
+
+    if (d.receiver_type in net_funds){
+      net_funds[d.receiver_type] = net_funds[d.receiver_type] + value;
+    }else{
+      net_funds[d.sender_type] = value
+    }
+  }
+
+  function prepare_net_data(){
+    for (var key in net_funds) {
+      bar_chart_data.push({account_type:key,value:net_funds[key]})
+    }
+  }
 
   function d3sankey() {
     var sankey = {},
@@ -794,7 +905,7 @@ export default function FundsFlow({ ...rest }) {
       <GridItem xs={12} sm={12} md={8}>
         <Card>
           <CardHeader className="section_2" color="primary">
-            <h4 style={{ marginTop: '5px', marginBottom: '5px', fontWeight: "500" }} >Counterparty Flow Of Funds</h4>
+            <h4 style={{ marginTop: '5px', marginBottom: '5px', fontWeight: "500" }} >Flow Of Funds</h4>
           </CardHeader>
           <CardBody>
             <div style={{ overflowX: "auto", overflowY: "hidden" }}>
@@ -805,7 +916,7 @@ export default function FundsFlow({ ...rest }) {
                   <div className="col-sm-3 col-xs-4 text-right"><h6 className={classes.cardTitle} style={{ marginTop: '0px', marginBottom: '2px' }}>Receipts</h6></div>
                 </div>
                 <div className="row">
-                  <div className="col-sm-12  text-center" id="info"></div>
+                  <div className="col-sm-12  text-center chart-info" id="info"></div>
                 </div>
                 <div className="row">
                   <div id="sankeychart" className="vis-sankeychart" />
@@ -816,7 +927,23 @@ export default function FundsFlow({ ...rest }) {
         </Card>
       </GridItem>
       <GridItem xs={5} sm={12} md={4}>
-        <FundsTotals />
+        <Card>
+          <CardHeader className="section_2" color="primary">
+            <h4 style={{ marginTop: '5px', marginBottom: '5px', fontWeight: "500" }} >Net Flow Of Funds</h4>
+          </CardHeader>
+          <CardBody>
+            <div style={{ overflowX: "auto", overflowY: "hidden" }}>
+              <div className="chart-container center">
+                <div className="row">
+                  <div className="col-sm-12  text-center chart-info" id="bar-info"></div>
+                </div>
+                <div className="row">
+                  <div id="barchart" className="vis-barchart" />
+                </div>
+              </div>
+            </div>
+          </CardBody>
+        </Card>
       </GridItem>
     </GridContainer>
   );
