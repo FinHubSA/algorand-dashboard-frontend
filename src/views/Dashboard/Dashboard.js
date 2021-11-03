@@ -130,11 +130,18 @@ export default function Dashboard() {
   return (
     <div>
       <div class="banner" >
-<div class="banner-content">
+        <div class="banner-content">
 <h2 class="banner-header"> Algorand Analysis Dashboard</h2>
 <h7 class ="banner-sub">Welcome to the Algorand blockchain analysis dashboard, developed by the Algorand-UCT Financial Innovation Hub.</h7>
 </div>
-</div>
+      </div>
+       <Divider 
+        style={{
+          borderBottomWidth: "3px",
+          marginBottom: "5px",
+          marginTop: "20px"
+        }} 
+      />
       <GridContainer>
         <GridItem xs={12} sm={12} md={12}>
           <Statistics />
