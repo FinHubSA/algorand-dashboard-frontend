@@ -174,7 +174,7 @@ export default function Statistics() {
     };
     
     const handleGetRange = () => {
-        get_data();
+      getData();
     };
 
     return (
@@ -198,7 +198,7 @@ export default function Statistics() {
                <Card>
             <CardHeader  color="warning" stats icon>
               <CardIcon  color="warning" className="section_1">
-                <Icon className="section_1">content_copy</Icon>
+                <Icon className="section_1">list_alt</Icon>
               </CardIcon>
               <p className={classes.cardCategory}>Total Number Transactions</p>
               <h3 className={classes.cardTitle}> {total_transactions}
@@ -216,7 +216,7 @@ export default function Statistics() {
                 <Card>
             <CardHeader color="success" stats icon>
               <CardIcon className="section_1" color="success">
-                <Store />
+                <Icon className="section_1">money</Icon>
               </CardIcon>
               <p className={classes.cardCategory}>Average Transaction Size</p>
               <h3 className={classes.cardTitle}>R {average_transaction_amount} </h3>
@@ -238,7 +238,7 @@ export default function Statistics() {
                <Card>
             <CardHeader color="success" stats icon>
               <CardIcon className="section_1" color="success">
-                <Store />
+                <Icon className="section_1">account_balance</Icon>
               </CardIcon>
               <p className={classes.cardCategory}>Volume in Circulation</p>
                   <h3 className={classes.cardTitle}>{total_volume }</h3>
@@ -255,7 +255,7 @@ export default function Statistics() {
                <Card>
             <CardHeader color="success" stats icon>
               <CardIcon className="section_1" color="success">
-                <Store />
+                <Icon className="section_1">credit_card</Icon>
               </CardIcon>
               <p className={classes.cardCategory}>Average Loan Amount</p>
               <h3 className={classes.cardTitle}>R {average_loan_amount}</h3>
