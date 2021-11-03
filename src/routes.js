@@ -20,6 +20,7 @@ import DashboardIcon from "@material-ui/icons/Dashboard";
 import BubbleChartIcon from "@material-ui/icons/BubbleChart";
 import AccountTreeIcon from "@material-ui/icons/AccountTree";
 import BarChartIcon from "@material-ui/icons/BarChart";
+import TimelineIcon from "@material-ui/icons/Timeline";
 import PersonIcon from "@material-ui/icons/Person";
 import LibraryBooksIcon from "@material-ui/icons/LibraryBooks";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
@@ -79,7 +80,7 @@ const dashboardRoutes = [
     path: "/statistics",
     name: "Statistics",
     rtlName: "قائمة الجدول",
-    icon: BubbleChartIcon,
+    icon: TimelineIcon,
     component: Statistics,
     layout: "/admin",
   },
