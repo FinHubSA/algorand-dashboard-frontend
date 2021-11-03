@@ -48,8 +48,10 @@ const useStyles = makeStyles(styles);
 export default function Statistics() {
     const classes = useStyles();
     const [total_transactions, setTotalTransactions] = useState()
+    const [average_transaction_amount, setAverageTransactionAmount] = useState()
+    const [average_loan_amount, setAverageLoanAmount] = useState()
     const [total_volume, setVolume] = useState([])
-
+    
     var selectedFromDate = new Date();
     var selectedToDate = new Date();
 
@@ -61,18 +63,66 @@ export default function Statistics() {
     }, []);
 
     function getData(){
+        getAverageLoanAmount();
         getTotalTransactions();
+        getAverageTransactionAmount();
         getVolume();
     }
 
     //api calls
    const getTotalTransactions = () => {
      var url = "http://localhost:8000/api/total_transactions"
-     axios.get(url).then((response) => {
+     var fromDate = formatDate(selectedFromDate);
+     var toDate = formatDate(selectedToDate);
+   
+     var parameters = {"from":fromDate,"to":toDate};
+
+     axios.post(
+        url,
+        parameters
+      ).then((response) => {
         var transaction_number = number_formatter(response.data.total_transactions,4)
         setTotalTransactions(transaction_number);
      });
    }
+
+   const getAverageTransactionAmount = () => {
+      var url = "http://localhost:8000/api/average_transaction_amount"
+
+      var fromDate = formatDate(selectedFromDate);
+      var toDate = formatDate(selectedToDate);
+    
+      var parameters = {"from":fromDate,"to":toDate};
+
+      axios.post(
+        url,
+        parameters
+      ).then((response) => {
+        console.log("average**")
+        console.log(response.data)
+        var average = number_formatter(response.data.average_transaction_amount, 4)
+        setAverageTransactionAmount(average);
+      });
+   }
+
+   const getAverageLoanAmount = () => {
+      var url = "http://localhost:8000/api/average_loan_amount"
+
+      var fromDate = formatDate(selectedFromDate);
+      var toDate = formatDate(selectedToDate);
+    
+      var parameters = {"from":fromDate,"to":toDate};
+
+      axios.post(
+        url,
+        parameters
+      ).then((response) => {
+        console.log("average**")
+        console.log(response.data)
+        var average = number_formatter(response.data.average_loan_amount, 4)
+        setAverageLoanAmount(average);
+      });
+  }
 
   const getVolume = () => {
     var url = "http://localhost:8000/api/total_volume"
@@ -82,6 +132,20 @@ export default function Statistics() {
       //var repl = total.replace(/^0+(\d)|(\d)0+$/gm, '$1$2');
       setVolume(total);
      });
+  }
+
+  function formatDate(date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) 
+        month = '0' + month;
+    if (day.length < 2) 
+        day = '0' + day;
+
+    return [year, month, day].join('-');
   }
 
     function number_formatter(num, digits) {
@@ -155,7 +219,7 @@ export default function Statistics() {
                 <Store />
               </CardIcon>
               <p className={classes.cardCategory}>Average Transaction Size</p>
-              <h3 className={classes.cardTitle}>R34,24</h3>
+              <h3 className={classes.cardTitle}>R {average_transaction_amount} </h3>
             </CardHeader>
             <CardFooter stats>
             <div className={classes.stats}>
@@ -193,8 +257,8 @@ export default function Statistics() {
               <CardIcon className="section_1" color="success">
                 <Store />
               </CardIcon>
-              <p className={classes.cardCategory}>Average Loan Size</p>
-              <h3 className={classes.cardTitle}>R34,245</h3>
+              <p className={classes.cardCategory}>Average Loan Amount</p>
+              <h3 className={classes.cardTitle}>R {average_loan_amount}</h3>
             </CardHeader>
             <CardFooter stats>
             <div className={classes.stats}>

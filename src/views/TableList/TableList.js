@@ -74,7 +74,7 @@ export default function TableList() {
         <Card plain>
           <CardHeader className="section_1" plain color="primary">
             <h4 className={classes.cardTitleWhite}>
-              Table of most active accounts
+              Most active accounts
             </h4>
             <p className={classes.cardCategoryWhite}>
               An "active" account relate to the number of transactions an account is involved as either a "Sender" or a "Receiver".
