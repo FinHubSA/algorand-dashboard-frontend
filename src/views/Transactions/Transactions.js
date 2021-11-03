@@ -242,16 +242,6 @@ export default function Transactions({ ...rest }) {
   }
 
   function initialize_chart() {
-    var colors = d3
-      .scaleOrdinal()
-      .domain([
-        "Bank",
-        "CentralBank",
-        "Firm",
-        "Household",
-        "License Service Providers",
-      ])
-      .range(["#ff8c00", "#40e0d0", "#008000", "#a52a2a", "#4fc2be"]);
 
     d3.select(".vis-networkchart").html("");
 
@@ -273,7 +263,7 @@ export default function Transactions({ ...rest }) {
 
     var legend = svg
       .selectAll(".legend")
-      .data(colors.domain())
+      .data(Object.keys(groupColors))
       .enter()
       .append("g")
       .attr("class", "legend")
@@ -286,7 +276,7 @@ export default function Transactions({ ...rest }) {
       .attr("x", width - 18)
       .attr("width", 18)
       .attr("height", 18)
-      .style("fill", colors);
+      .style("fill", function(d){return groupColors[d];});
 
     legend
       .append("text")

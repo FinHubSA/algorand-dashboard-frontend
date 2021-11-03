@@ -82,7 +82,7 @@ const groupColors = {
   centralbank: "#40e0d0", 
   firm: "#008000", 
   household: "#a52a2a", 
-  lsp: "#953553"
+  lsp: "#0000FF"
 };
 const grayColor = [
   "#999",

@@ -28,7 +28,7 @@ export default function FundsFlow({ ...rest }) {
   const classes = useStyles();
   const chartWidth = 700;
   const chartHeight = 300;
-  const margin = { top: 20, right: 10, bottom: 30, left: 10 };
+  const margin = { top: 20, right: 10, bottom: 50, left: 10 };
   const width = chartWidth - margin.left - margin.right;
   const height = chartHeight - margin.top - margin.bottom;
   const node_labels = {
@@ -150,6 +150,39 @@ export default function FundsFlow({ ...rest }) {
       .attr("height", height + margin.top + margin.bottom)
       .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    
+    var dataL = -620;
+    var offset = 145;
+
+    var legend = svg
+      .selectAll(".legend")
+      .data(Object.keys(groupColors))
+      .enter()
+      .append("g")
+      .attr("class", "legend")
+      .attr("transform", function (d, i) {
+          var newdataL = dataL
+          dataL +=  d.length + offset
+          return "translate(" + (newdataL) + ",250)"
+      });
+
+    legend
+      .append("rect")
+      .attr("x", width - 18)
+      .attr("width", 18)
+      .attr("height", 18)
+      .style("fill", function(d){return groupColors[d];});
+
+    legend
+      .append("text")
+      .attr("x", width - 24)
+      .attr("y", 9)
+      .attr("dy", ".35em")
+      .style("text-anchor", "end")
+      .text(function (d) {
+        return d;
+      })
+      .on("click", function (event, d) {}); 
   }
 
   function prepare_data() {
@@ -181,9 +214,6 @@ export default function FundsFlow({ ...rest }) {
         });
       })
       .entries(chart_data);
-  
-    console.log("sub totals:");
-    console.log(payments_sub_totals);
   
     payments_sub_totals.forEach(function (acc_type) {
       acc_type.values.forEach(function (is_payments) {
@@ -251,11 +281,11 @@ export default function FundsFlow({ ...rest }) {
       d.instrument = nodes.indexOf(d.instrument);
     });
   
-    console.log("nodes:");
-    console.log(nodes);
+    // console.log("nodes:");
+    // console.log(nodes);
   
-    console.log("links:");
-    console.log(links);
+    // console.log("links:");
+    // console.log(links);
   
     // Get back nodes as an array of objects
     nodes.forEach(function (d, i) {
@@ -320,9 +350,9 @@ export default function FundsFlow({ ...rest }) {
             node_labels[source] +
               " &#8594; " +
               node_labels[target] +
-              ": <span class='bold'> R" +
+              ": <em> R " +
               fmt(d.value) +
-              " billion </span>"
+              " </em>"
           );
   
           d3.select(this).style("stroke-opacity", 0.5);
@@ -356,14 +386,6 @@ export default function FundsFlow({ ...rest }) {
       .attr("width", sankey.nodeWidth())
       .style("fill", function (d) {
         var name = d.name.replace(/ payments| receipts|/gi, "").toLowerCase();
-
-        // var source = d.source.name.replace(/ payments| receipts|/gi, "").toLowerCase();
-        // var target = d.target.name.replace(/ payments| receipts|/gi, "").toLowerCase();
-        // var name = source;
-        // if (groupColors[source] === undefined){
-        //   name = target;
-        // }
-        // return (d.color = groupColors[d.name]);
         return (d.color = groupColors[name]);
       })
       .on("mouseover", function (event, d) {
@@ -380,12 +402,12 @@ export default function FundsFlow({ ...rest }) {
         }
   
         d3.select("#info").html(
-          node_labels[node] +
+            node_labels[node] +
             " " +
             text +
-            ": <span class='bold'> £" +
+            ": <em> R " +
             fmt(d.value) +
-            " billion </span>"
+            " </em>"
         );
         d3.select(this).classed("highlight", true);
         var name = d.name.replace(/ payments| receipts|/gi, "");
