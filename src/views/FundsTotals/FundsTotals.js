@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import ChartistGraph from "react-chartist";
 import * as d3 from "d3";
+import _ from "lodash";
 import {nest as d3_nest} from 'd3-collection';
 import "../../assets/css/charts.css";
 import $ from "jquery";
