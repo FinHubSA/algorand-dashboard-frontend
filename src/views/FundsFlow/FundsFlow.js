@@ -414,6 +414,7 @@ export default function FundsFlow({ ...rest }) {
     nodes = [];
     links = [];
     linksX = [];
+    net_funds = {};
     
     //We are creating a chart like this:
     //Total Payments  -> Instrument -> Receipts
