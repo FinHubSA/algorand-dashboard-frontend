@@ -32,7 +32,7 @@ import Statistics from "views/Statistics/Statistics.js";
 import Transactions from "views/Transactions/Transactions.js";
 import FundsFlow from "views/FundsFlow/FundsFlow.js";
 import DashboardPage from "views/Dashboard/Dashboard.js";
-import FundsTotals from "views/FundsTotals/FundsTotals.js";
+import AccountsActivity from "views/AccountsActivity/AccountsActivity.js";
 import UserProfile from "views/UserProfile/UserProfile.js";
 import TableList from "views/TableList/TableList.js";
 import Typography from "views/Typography/Typography.js";
@@ -69,11 +69,11 @@ const dashboardRoutes = [
     layout: "/admin",
   },
   {
-    path: "/totals",
-    name: "Funds Totals",
+    path: "/accounts-activity",
+    name: "Accounts Activity",
     rtlName: "قائمة الجدول",
     icon: BarChartIcon,
-    component: FundsTotals,
+    component: AccountsActivity,
     layout: "/admin",
   },
   {
