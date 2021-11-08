@@ -98,10 +98,6 @@ h5 {
   padding: 10px;
 }
 
-.legend {
-  cursor: pointer;
-}
-
 .node-info {
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
   font-weight: 300;

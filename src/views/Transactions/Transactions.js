@@ -260,36 +260,39 @@ export default function Transactions({ ...rest }) {
       .append("div")
       .attr("class", "node-tooltip")
       .html("Tooltip");
+  
+      var legend_container = d3
+        .select(".vis-networkchart")
+        .append("div")
+        .style("display", "inline-block")
+        .style("width","100%");
 
-    var legend = svg
-      .selectAll(".legend")
-      .data(Object.keys(groupColors))
-      .enter()
-      .append("g")
-      .attr("class", "legend")
-      .attr("transform", function (d, i) {
-        return "translate(0," + i * 30 + ")";
-      });
-
-    legend
-      .append("rect")
-      .attr("x", width - 18)
-      .attr("width", 18)
-      .attr("height", 18)
-      .style("fill", function(d){return groupColors[d];});
-
-    legend
-      .append("text")
-      .attr("x", width - 24)
-      .attr("y", 9)
-      .attr("dy", ".35em")
-      .style("text-anchor", "end")
-      .text(function (d) {
-        return d;
-      })
-      .on("click", function (event, d) {
-        
-      }); 
+      var legend = legend_container
+        .selectAll(".legend")
+        .data(Object.keys(groupColors))
+        .enter()
+        .append("div")
+        .attr("class", "legend")
+        .style("height", "20px")
+        .style("width", "auto")
+        .style("margin-right","145px")
+        .style("float", "left");
+  
+      legend
+        .append("div")
+        .style("height","20px")
+        .style("width","20px")
+        .style("float", "right")
+        .style("margin-left","10px")
+        .style("background-color",function(d){return groupColors[d];})
+        .style("fill", function(d){return groupColors[d];});
+  
+      legend
+        .append("text")
+        .style("float", "left")
+        .text(function (d) {
+          return d;
+        })
   }
 
   /**
