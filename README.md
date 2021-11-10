@@ -4,41 +4,29 @@
 
 Quick start options:
 
-- Clone the repo: `git clone https://github.com/creativetimofficial/material-dashboard-react.git`
+- Clone the repo: `git clone https://github.com/FinHubSA/algorand-dashboard-frontend.git`
 - `npm install`
 - `npm start`
-
-
-## Documentation
-The documentation for the Material Dashboard React is hosted at our [website](https://demos.creative-tim.com/material-dashboard-react/#/documentation/tutorial).
 
 ## Technical Support or Questions
 
 If you have questions or need help integrating the product please [contact us](https://www.creative-tim.com/contact-us) instead of opening an issue.
 
+## Acknowledgement
+
+Big acknowledgement to Creative Tim (https://www.creative-tim.com) from which a template material-UI frontend was sourced. 
+
 ## Licensing
 
-- Copyright 2021 Creative Tim (https://www.creative-tim.com)
-- Licensed under MIT (https://github.com/creativetimofficial/material-dashboard-react/blob/main/LICENSE.md)
-
-## Useful Links
-
-More products from Creative Tim: <https://www.creative-tim.com/products>
-
-Tutorials: <https://www.youtube.com/channel/UCVyTG4sCw-rOvB9oHkzZD1w>
-
-Freebies: <https://www.creative-tim.com/products>
-
-Affiliate Program (earn money): <https://www.creative-tim.com/affiliates/new>
+- Copyright 2021 Algorand-UCT Financial Innovation Hub (www.finhub.org.za)
+- Licensed under MIT 
 
 Social Media:
 
-Twitter: <https://twitter.com/CreativeTim>
+LinkedIn: <https://www.linkedin.com/company/algorand-uct-financial-innovation-hub/>
 
-Facebook: <https://www.facebook.com/CreativeTim>
+Web: <https://www.finhub.org.za>
 
-Dribbble: <https://dribbble.com/creativetim>
+Contact:
 
-Google+: <https://plus.google.com/+CreativetimPage>
-
-Instagram: <https://instagram.com/creativetimofficial>
+- hub@uct.ac.za
