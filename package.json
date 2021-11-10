@@ -31,8 +31,6 @@
     "react-scripts": "4.0.3",
     "react-swipeable-views": "0.14.0",
     "styled-components": "^5.3.3",
-    "zingchart": "^2.9.7",
-    "zingchart-react": "^3.1.0",
     "zinggrid": "^1.2.7"
   },
   "scripts": {
