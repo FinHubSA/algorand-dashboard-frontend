@@ -545,7 +545,7 @@ export default function FundsFlow({ ...rest }) {
     if (d.receiver_type in net_funds){
       net_funds[d.receiver_type] = net_funds[d.receiver_type] + value;
     }else{
-      net_funds[d.sender_type] = value
+      net_funds[d.receiver_type] = value
     }
   }
 
