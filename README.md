@@ -4,8 +4,9 @@
 
 Quick start options:
 
-- `npm i material-dashboard-react`
-- Clone the repo: `git clone https://github.com/creativetimofficial/material-dashboard-react.git`.
+- Clone the repo: `git clone https://github.com/creativetimofficial/material-dashboard-react.git`
+- `npm install`
+- `npm start`
 
 
 ## Documentation
