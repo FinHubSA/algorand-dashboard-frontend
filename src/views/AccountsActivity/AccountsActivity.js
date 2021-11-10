@@ -4,7 +4,7 @@ import _ from "lodash";
 import {nest as d3_nest} from 'd3-collection';
 import "../../assets/css/charts.css";
 import $ from "jquery";
-import axios from "axios";
+import axios from "components/Axios/axios.js";
 // @material-ui/core
 import { makeStyles } from "@material-ui/core/styles";
 import GridItem from "components/Grid/GridItem.js";

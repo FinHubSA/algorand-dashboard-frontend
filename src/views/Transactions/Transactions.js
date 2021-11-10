@@ -4,7 +4,7 @@ import {nest as d3_nest} from 'd3-collection';
 import "../../assets/css/charts.css";
 import _ from "lodash";
 import $ from "jquery";
-import axios from "axios";
+import axios from "components/Axios/axios.js";
 import DateFnsUtils from '@date-io/date-fns';
 // @material-ui/core
 import { makeStyles } from "@material-ui/core/styles";

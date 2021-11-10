@@ -35,7 +35,7 @@ import CardHeader from "components/Card/CardHeader.js";
 import CardIcon from "components/Card/CardIcon.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
-import axios from "axios";
+import axios from "components/Axios/axios.js";
 
 import Statistics from "views/Statistics/Statistics.js";
 import FundsFlow from "views/FundsFlow/FundsFlow.js";
