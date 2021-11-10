@@ -40,7 +40,7 @@ export default function AccountsActivity({ ...rest }) {
   });
 
   function get_data() {
-    var url = "http://localhost:8000/api/most_active_accounts"
+    var url = "/api/most_active_accounts"
     var fromDate = "2020-11-03" //formatDate(selectedFromDate);
     var toDate = "2021-11-03" //formatDate(selectedToDate);
     

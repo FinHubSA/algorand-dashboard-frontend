@@ -194,7 +194,7 @@ export default function Transactions({ ...rest }) {
   });
 
   function get_data() {
-    var url = "http://localhost:8000/api/node_transactions"
+    var url = "/api/node_transactions"
 
     var fromDate = formatDate(selectedFromDate);
     var toDate = formatDate(selectedToDate);

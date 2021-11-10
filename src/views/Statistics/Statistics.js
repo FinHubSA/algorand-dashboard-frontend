@@ -35,7 +35,7 @@ import CardHeader from "components/Card/CardHeader.js";
 import CardIcon from "components/Card/CardIcon.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
-import axios from "axios";
+import axios from "components/Axios/axios.js";
 import TableList from "views/TableList/TableList.js";
 
 // charts
@@ -73,7 +73,7 @@ export default function Statistics() {
 
     //api calls
    const getTotalTransactions = () => {
-     var url = "http://localhost:8000/api/total_transactions"
+     var url = "/api/total_transactions"
      var fromDate = formatDate(selectedFromDate);
      var toDate = formatDate(selectedToDate);
    
@@ -89,7 +89,7 @@ export default function Statistics() {
    }
 
    const getAverageTransactionAmount = () => {
-      var url = "http://localhost:8000/api/average_transaction_amount"
+      var url = "/api/average_transaction_amount"
 
       var fromDate = formatDate(selectedFromDate);
       var toDate = formatDate(selectedToDate);
@@ -108,7 +108,7 @@ export default function Statistics() {
    }
 
    const getAverageLoanAmount = () => {
-      var url = "http://localhost:8000/api/average_loan_amount"
+      var url = "/api/average_loan_amount"
 
       var fromDate = formatDate(selectedFromDate);
       var toDate = formatDate(selectedToDate);
@@ -127,7 +127,7 @@ export default function Statistics() {
   }
 
   const getVolume = () => {
-    var url = "http://localhost:8000/api/total_volume"
+    var url = "/api/total_volume"
     axios.get(url).then((response) => {
       var total = number_formatter(response.data.total_volume,4)
       setVolume(total);
@@ -135,7 +135,7 @@ export default function Statistics() {
   }
 
   const getAccountsActivity = () => {
-    var url = "http://localhost:8000/api/most_active_accounts"
+    var url = "/api/most_active_accounts"
     var fromDate = formatDate(selectedFromDate);
     var toDate = formatDate(selectedToDate);
     

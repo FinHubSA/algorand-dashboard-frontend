@@ -98,7 +98,7 @@ export default function FundsFlow({ ...rest }) {
   });
 
   function get_data() {
-    var url = "http://localhost:8000/api/account_type_payments_receipts"
+    var url = "/api/account_type_payments_receipts"
 
     var fromDate = formatDate(selectedFromDate);
     var toDate = formatDate(selectedToDate);

@@ -57,6 +57,7 @@
     "url": "https://github.com/creativetimofficial/material-dashboard-react/issues"
   },
   "homepage": "http://algorand-dashboard-frontend.herokuapp.com/",
+  "proxy": "http://algorand-dashboard-backend.herokuapp.com",
   "optionalDependencies": {
     "@babel/core": "7.14.0",
     "fsevents": "^2.3.2",

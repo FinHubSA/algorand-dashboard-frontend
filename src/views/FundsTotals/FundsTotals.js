@@ -64,7 +64,7 @@ export default function FundsFlow({ ...rest }) {
   });
 
   function get_data() {
-    var url = "http://localhost:8000/api/account_type_total"
+    var url = "/api/account_type_total"
     axios.get(url).then((response) => {
       console.log("acc ty **");
       console.log(response.data)

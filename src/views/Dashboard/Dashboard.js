@@ -57,7 +57,7 @@ export default function Dashboard() {
 
 
   // React.useEffect(() => {
-  //   var url = "http://localhost:8000/api/total_transactions"
+  //   var url = "/api/total_transactions"
   //   axios.get(url).then((response) => {
   //     setTransactions(response.data);
   //   });
@@ -70,13 +70,13 @@ export default function Dashboard() {
 
     //api calls
    const getTransactions = () => {
-     var url = "http://localhost:8000/api/total_transactions"
+     var url = "/api/total_transactions"
      axios.get(url).then((response) => {
        setTransactions(response.data);
      });
    }
   const getVolume = () => {
-    var url = "http://localhost:8000/api/total_volume"
+    var url = "/api/total_volume"
     axios.get(url).then((response) => {
       var total = response.data.total_volume
       //remove trailing zeroes
