@@ -1,4 +1,4 @@
-# [Algorand Blockchain Analysis Dashboard]
+# Algorand Blockchain Analysis Dashboard
 
 ## Quick start
 
