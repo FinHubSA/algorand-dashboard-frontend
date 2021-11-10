@@ -10,7 +10,7 @@ Quick start options:
 
 ## Technical Support or Questions
 
-If you have questions or need help integrating the product please [contact us](https://www.finhub.org.za/#contact-form) instead of opening an issue.
+If you have questions or need help please [contact us](https://www.finhub.org.za/#contact-form) instead of opening an issue.
 
 ## Acknowledgement
 
@@ -27,6 +27,4 @@ LinkedIn: <https://www.linkedin.com/company/algorand-uct-financial-innovation-hu
 
 Web: <https://www.finhub.org.za>
 
-Contact:
 
-- hub@uct.ac.za
