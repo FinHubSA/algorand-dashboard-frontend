@@ -30,6 +30,7 @@
     "react-router-dom": "5.2.0",
     "react-scripts": "4.0.3",
     "react-swipeable-views": "0.14.0",
+    "serve": "^13.0.2",
     "styled-components": "^5.3.3",
     "zinggrid": "^1.2.7"
   },
