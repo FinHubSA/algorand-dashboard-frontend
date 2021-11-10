@@ -44,7 +44,7 @@ const useStyles = makeStyles(styles);
 export default function Transactions({ ...rest }) {
   const classes = useStyles();
   const chartWidth = 1100
-  const chartHeight = 430;
+  const chartHeight = 510;
   const selectedAccountType = React.useRef();
   const selectedAccountTypeRange = React.useRef();
   const [data, set_data] = React.useState([
