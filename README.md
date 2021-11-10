@@ -10,7 +10,7 @@ Quick start options:
 
 ## Technical Support or Questions
 
-If you have questions or need help integrating the product please [contact us](https://www.creative-tim.com/contact-us) instead of opening an issue.
+If you have questions or need help integrating the product please [contact us](https://www.finhub.org.za/#contact-form) instead of opening an issue.
 
 ## Acknowledgement
 
