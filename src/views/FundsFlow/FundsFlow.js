@@ -29,7 +29,7 @@ export default function FundsFlow({ ...rest }) {
   const classes = useStyles();
   const node_labels = {
     "Bank": "Bank",
-    "CentralBank": "CentralBank",
+    "CentralBank": "Central Bank",
     "Firm": "Firm",
     "Household": "Household",
     "LSP": "LSP",

@@ -314,7 +314,6 @@ export default function Statistics() {
                     <zg-column index="net_transactions_value" header="Net Txns Value" filter="disabled" type="currency" type-currency="ZAR"></zg-column>
                     <zg-column index="number_of_transactions" header="Num Txns" filter="disabled"></zg-column>
                     <zg-column index="receipts" filter="disabled" type="currency" type-currency="ZAR" sort-desc width="150"></zg-column>
-                    <zg-column index="balance" filter="disabled" type="currency" type-currency="ZAR" width="150"></zg-column>
                     <zg-column index="number_of_receipts" header="Num Receipts" filter="disabled"></zg-column>
                     <zg-column index="payments" filter="disabled" type="currency" type-currency="ZAR"></zg-column>
                     <zg-column index="number_of_payments" header="Num Payments" filter="disabled"></zg-column>
