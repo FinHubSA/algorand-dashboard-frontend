@@ -14,6 +14,7 @@ import CardIcon from "components/Card/CardIcon.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 import axios from "components/Axios/axios.js";
+import moment from "moment";
 
 // charts
 import DateRangePicker from "components/DateRange/DateRangePicker.js"
@@ -179,8 +180,8 @@ export default function Statistics() {
     return (
       <GridContainer>
         <GridItem xs={12} sm={12} md={12}>
-            <GridContainer>
-                <GridItem xs={12} sm={12} md={6}>
+          <GridContainer >
+                <GridItem xs={12} sm={12} md={12} >
                     <DateRangePicker 
                         handleFromDateChange={handleFromDateChange} 
                         handleToDateChange={handleToDateChange}

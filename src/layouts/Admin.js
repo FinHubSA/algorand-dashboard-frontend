@@ -16,7 +16,7 @@ import routes from "routes.js";
 import styles from "assets/jss/material-dashboard-react/layouts/adminStyle.js";
 
 import bgImage from "assets/img/sidebar-2.jpg";
-import logo from "assets/img/gouped_logo.png";
+import logo from "assets/img/algorand_logo.png";
 //import finhub_logo from "assets/img/finhub_logo.png";
 //src/assets/img/gouped_logo.png
 let ps;
