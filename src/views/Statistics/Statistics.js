@@ -3,45 +3,23 @@ import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Icon from "@material-ui/core/Icon";
 // @material-ui/icons
-import Store from "@material-ui/icons/Store";
-import Warning from "@material-ui/icons/Warning";
-import DateRange from "@material-ui/icons/DateRange";
-import LocalOffer from "@material-ui/icons/LocalOffer";
 import Update from "@material-ui/icons/Update";
-import AccessTime from "@material-ui/icons/AccessTime";
-import Accessibility from "@material-ui/icons/Accessibility";
-import BugReport from "@material-ui/icons/BugReport";
-import Code from "@material-ui/icons/Code";
-import Cloud from "@material-ui/icons/Cloud";
-
-import ReactDOM from 'react-dom';
-import Divider from '@mui/material/Divider';
-
-//date picker
-import DatePicker from "react-datepicker";
-// import required css from library
-import "react-datepicker/dist/react-datepicker.css";
-import moment from "moment";
 
 // core components
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
-import Table from "components/Table/Table.js";
-import Tasks from "components/Tasks/Tasks.js";
-import CustomTabs from "components/CustomTabs/CustomTabs.js";
-import Danger from "components/Typography/Danger.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardIcon from "components/Card/CardIcon.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 import axios from "components/Axios/axios.js";
-import TableList from "views/TableList/TableList.js";
 
 // charts
 import DateRangePicker from "components/DateRange/DateRangePicker.js"
-import ZingGrid from 'zinggrid';
 import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js";
+import {dailySalesChart} from "variables/charts.js";
+import ChartistGraph from "react-chartist";
 
 const useStyles = makeStyles(styles);
 
@@ -291,39 +269,65 @@ export default function Statistics() {
         </GridItem>
 
         <GridItem xs={12} sm={12} md={9}>
-          <Card>
-            <CardHeader className="section_1" color="primary">
-              <h4 style={{ marginTop: '5px', marginBottom: '5px', fontWeight: "500" }} >Accounts Activity</h4>
-            </CardHeader>
-            <CardBody>
-              <div style={{ overflowX: "auto", overflowY: "hidden" }}>
-                <zing-grid 
-                  id="accounts_activity"
-                  data={JSON.stringify(accounts_activity)} 
-                  draggable="columns" 
-                  drag-action="reorder"
-                  page-size="11"
-                  pager
-                  sort
-                  loading
-                  filter>
-                  <zg-colgroup>
-                    <zg-column index="account" filter="disabled" sort="disabled"></zg-column>
-                    <zg-column index="account_type" sort="disabled"></zg-column>
-                    <zg-column index="balance" filter="disabled" type="currency" type-currency="ZAR" width="150"></zg-column>
-                    <zg-column index="net_transactions_value" header="Net Txns Value" filter="disabled" type="currency" type-currency="ZAR"></zg-column>
-                    <zg-column index="number_of_transactions" header="Num Txns" filter="disabled"></zg-column>
-                    <zg-column index="receipts" filter="disabled" type="currency" type-currency="ZAR" sort-desc width="150"></zg-column>
-                    <zg-column index="balance" filter="disabled" type="currency" type-currency="ZAR" width="150"></zg-column>
-                    <zg-column index="number_of_receipts" header="Num Receipts" filter="disabled"></zg-column>
-                    <zg-column index="payments" filter="disabled" type="currency" type-currency="ZAR"></zg-column>
-                    <zg-column index="number_of_payments" header="Num Payments" filter="disabled"></zg-column>
-                    <zg-column index="abs_transactions_value" filter="disabled" type="currency" type-currency="ZAR"></zg-column>
-                  </zg-colgroup>
-                </zing-grid>
-              </div>
-            </CardBody>
-          </Card>
+          <GridContainer>
+            <GridItem xs={12} sm={12} md={12}>
+              <Card>
+                <CardHeader className="section_1" color="primary">
+                  <h4 style={{ marginTop: '5px', marginBottom: '5px', fontWeight: "500" }} >Accounts Activity</h4>
+                </CardHeader>
+                <CardBody>
+                  <div style={{ overflowX: "auto", overflowY: "hidden" }}>
+                    <zing-grid 
+                      id="accounts_activity"
+                      data={JSON.stringify(accounts_activity)} 
+                      draggable="columns" 
+                      drag-action="reorder"
+                      page-size="5"
+                      pager
+                      sort
+                      loading
+                      filter>
+                      <zg-colgroup>
+                        <zg-column index="account" filter="disabled" sort="disabled"></zg-column>
+                        <zg-column index="account_type" sort="disabled"></zg-column>
+                        <zg-column index="balance" filter="disabled" type="currency" type-currency="ZAR" width="150"></zg-column>
+                        <zg-column index="net_transactions_value" header="Net Txns Value" filter="disabled" type="currency" type-currency="ZAR"></zg-column>
+                        <zg-column index="number_of_transactions" header="Num Txns" filter="disabled"></zg-column>
+                        <zg-column index="receipts" filter="disabled" type="currency" type-currency="ZAR" sort-desc width="150"></zg-column>
+                        <zg-column index="balance" filter="disabled" type="currency" type-currency="ZAR" width="150"></zg-column>
+                        <zg-column index="number_of_receipts" header="Num Receipts" filter="disabled"></zg-column>
+                        <zg-column index="payments" filter="disabled" type="currency" type-currency="ZAR"></zg-column>
+                        <zg-column index="number_of_payments" header="Num Payments" filter="disabled"></zg-column>
+                        <zg-column index="abs_transactions_value" filter="disabled" type="currency" type-currency="ZAR"></zg-column>
+                      </zg-colgroup>
+                    </zing-grid>
+                  </div>
+                </CardBody>
+              </Card>
+            </GridItem>
+            <GridItem xs={12} sm={12} md={12}>
+              <Card chart>
+                <CardHeader className="section_1" color="primary">
+                <ChartistGraph
+                    className="ct-chart"
+                    data={dailySalesChart.data}
+                    type="Line"
+                    options={dailySalesChart.options}
+                    listener={dailySalesChart.animation}
+                  /></CardHeader>
+                <CardBody color="warning">
+                  <ChartistGraph
+                    className="ct-chart"
+                    data={dailySalesChart.data}
+                    type="Line"
+                    options={dailySalesChart.options}
+                    listener={dailySalesChart.animation}
+                    style={{ background: 'blue' }}
+                  />
+                </CardBody>
+              </Card>
+            </GridItem>
+          </GridContainer>
         </GridItem>
        
       </GridContainer>
