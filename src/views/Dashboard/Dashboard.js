@@ -35,17 +35,17 @@ export default function Dashboard() {
     <div>
       <div class="banner" >
         <div class="banner-content container">
-          <div class="row">
-            <div class="col">
+          <GridContainer>
+            <GridItem item xs={7}>
               <h1 class="banner-header">CBDC Analytics Dashboard</h1>
               <p></p>
                <h7 class="banner-sub">Welcome to the Algorand CBDC blockchain analytics dashboard, developed by the Algorand-UCT Financial Innovation Hub.</h7>
-            </div>
-            <div class="col">
-              <img class="banner-logo" src={algo_logo}  height={100}></img>
-            </div>
-          </div>
-        </div>
+            </GridItem>
+            <GridItem item xs={5}>
+             <img class="banner-logo" src={algo_logo}  height={100}></img>
+            </GridItem>            
+          </GridContainer>        
+        </div>s
       </div>
        <Divider 
         style={{
