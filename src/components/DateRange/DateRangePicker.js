@@ -8,6 +8,8 @@ import GridContainer from "components/Grid/GridContainer.js";
 import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
 import Button from "components/CustomButtons/Button.js";
+import moment from "moment";
+
 
 export default function DateRangePicker(props) {
   const [selectedFromDate, setSelectedFromDate] = React.useState(props.selectedFromDate);
@@ -32,7 +34,18 @@ export default function DateRangePicker(props) {
   return (
     <div>
       <GridContainer>
-        <GridItem xs={12} sm={12} md={12}>
+        <GridItem xs={12} sm={12} md={6} >
+         {selectedFromDate && selectedToDate && (
+                <div style={{ paddingTop: '2rem' , paddingLeft: '1rem'}} >
+               <h5>
+                Data from <span className="date-text">{moment(selectedFromDate).format("LL")}</span> to{" "}
+                 <span className="date-text"> {moment(selectedToDate).format("LL")}</span>.
+              </h5>
+              </div>
+              
+            )}
+          </GridItem>
+        <GridItem xs={12} sm={12} md={6}>
           <Card>
             <CardBody>
               <GridContainer>

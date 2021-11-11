@@ -895,7 +895,7 @@ export default function FundsFlow({ ...rest }) {
 
   return (
     <GridContainer>
-      <GridItem xs={12} sm={6} md={6}>
+      <GridItem xs={12} sm={6} md={12}>
         <DateRangePicker 
           handleFromDateChange={handleFromDateChange} 
           handleToDateChange={handleToDateChange}
