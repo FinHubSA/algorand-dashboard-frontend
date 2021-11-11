@@ -3,7 +3,7 @@ import axios from 'axios';
 // Next we make an 'instance' of it
 const instance = axios.create({
 // .. where we make our configurations
-    baseURL: 'https://algorand-dashboard-backend.herokuapp.com'
+    baseURL: process.env.REACT_APP_BASE_URL
 });
 
 export default instance;

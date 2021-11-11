@@ -363,7 +363,7 @@ export default function FundsFlow({ ...rest }) {
   
         if (d.name.substr(d.name.lastIndexOf(" rec") + 1) == "receipts") {
           text = "receipts";
-        } else if (d.name.substr(d.name.lastIndexOf(" lia") + 1) == "payments") {
+        } else if (d.name.substr(d.name.lastIndexOf(" pay") + 1) == "payments") {
           text = "payments";
         } else {
           text = "";
