@@ -79,7 +79,7 @@ const infoColor = ["#00acc1", "#26c6da", "#00acc1", "#00d3ee"];
 const roseColor = ["#e91e63", "#ec407a", "#d81b60", "#eb3573"];
 const groupColors = {
   bank:"#131033", 
-  centralbank: "#000000", 
+  centralbank: "#32CD32", 
   firm: "#EE3A6B", 
   household: "#27AAE1", 
   lsp: "#0000FF"
