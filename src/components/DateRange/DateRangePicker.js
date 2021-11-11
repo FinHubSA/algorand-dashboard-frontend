@@ -65,7 +65,8 @@ export default function DateRangePicker(props) {
                 </GridItem>
 
                 <GridItem xs={12} sm={12} md={4}>
-                  <Button 
+                  <Button
+                    style={{marginTop: "1rem"}}
                       color="primary"
                       className="section_3"
                       round
