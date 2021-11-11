@@ -18,6 +18,8 @@ import Transactions from "views/Transactions/Transactions.js";
 import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js";
 import "../../assets/css/react-date_picker.css";
 
+import algo_logo from "assets/img/algorand_full_logo_white.png";
+
 const useStyles = makeStyles(styles);
 
 export default function Dashboard() {
@@ -29,12 +31,21 @@ export default function Dashboard() {
   React.useEffect(() => {}, []);
   
   return (
+    
     <div>
       <div class="banner" >
-        <div class="banner-content">
-<h2 class="banner-header"> Algorand Analysis Dashboard</h2>
-<h7 class ="banner-sub">Welcome to the Algorand blockchain analysis dashboard, developed by the Algorand-UCT Financial Innovation Hub.</h7>
-</div>
+        <div class="banner-content container">
+          <div class="row">
+            <div class="col">
+              <h1 class="banner-header">CBDC Analytics Dashboard</h1>
+              <p></p>
+               <h7 class="banner-sub">Welcome to the Algorand CBDC blockchain analytics dashboard, developed by the Algorand-UCT Financial Innovation Hub.</h7>
+            </div>
+            <div class="col">
+              <img class="banner-logo" src={algo_logo}  height={100}></img>
+            </div>
+          </div>
+        </div>
       </div>
        <Divider 
         style={{
