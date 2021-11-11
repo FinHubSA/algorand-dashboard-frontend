@@ -89,7 +89,7 @@ export default function Sidebar(props) {
         className={classNames(classes.logoLink, {
           [classes.logoLinkRTL]: props.rtlActive,
         })}
-        target="_blank"
+        target="https://www.finhub.org.za/"
       >
         <div className={classes.logoImage}>
           <img src={logo} alt="logo" className={classes.img} />
