@@ -229,7 +229,7 @@ export default function FundsFlow({ ...rest }) {
     var width = width - margin.left - margin.right;
     var height = height - margin.top - margin.bottom;
 
-    d3.select(".vis-sankeychart > *").remove();
+    d3.select(".vis-sankeychart").html("");
     
     //create sankey_svg
     sankey_svg = d3

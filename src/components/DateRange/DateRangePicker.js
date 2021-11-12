@@ -2,6 +2,9 @@ import React from "react";
 import DateFnsUtils from '@date-io/date-fns';
 // @material-ui/core
 import {MuiPickersUtilsProvider, DatePicker} from '@material-ui/pickers';
+import TextField from '@material-ui/core/TextField';
+import { Select, MenuItem } from '@material-ui/core';
+
 // core components
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
@@ -12,6 +15,7 @@ import Button from "components/CustomButtons/Button.js";
 export default function DateRangePicker(props) {
   const [selectedFromDate, setSelectedFromDate] = React.useState(props.selectedFromDate);
   const [selectedToDate, setSelectedToDate] = React.useState(props.selectedToDate);
+  const [interval, setInterval] = React.useState("day");
 
   const handleFromDateChange = (date) => {
       //console.log(date);
@@ -29,6 +33,11 @@ export default function DateRangePicker(props) {
     props.handleGetRange();
   };
 
+  const handleIntervalChange = event => {
+    setInterval(event.target.value);
+    props.handleIntervalChange(event.target.value);
+  };
+  
   return (
     <div>
       <GridContainer>
@@ -36,7 +45,7 @@ export default function DateRangePicker(props) {
           <Card>
             <CardBody>
               <GridContainer>
-                <GridItem xs={12} sm={12} md={4}>
+                <GridItem xs={12} sm={12} md={props.showInterval ? 3 : 4}>
                   <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <DatePicker
                       style={{margin:"10px"}}
@@ -50,7 +59,7 @@ export default function DateRangePicker(props) {
                   </MuiPickersUtilsProvider>
                 </GridItem>
 
-                <GridItem xs={12} sm={12} md={4}>
+                <GridItem xs={12} sm={12} md={props.showInterval ? 3 : 4}>
                   <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <DatePicker
                       style={{margin:"10px"}}
@@ -64,7 +73,25 @@ export default function DateRangePicker(props) {
                   </MuiPickersUtilsProvider>
                 </GridItem>
 
-                <GridItem xs={12} sm={12} md={4}>
+                <GridItem 
+                  xs={12} sm={6} md={3}
+                  style={{ display: props.showInterval ? "" : "none" }}>
+                  <TextField
+                    style={{margin:"5px", width:"100%"}}
+                    variant="outlined"
+                    label="Interval"
+                    id="interval_select"
+                    value={interval}
+                    select
+                    onChange={handleIntervalChange}
+                  >
+                    <MenuItem value="day">Day</MenuItem>
+                    <MenuItem value="month">Month</MenuItem>
+                    <MenuItem value="year">Year</MenuItem>
+                  </TextField>
+                </GridItem>
+
+                <GridItem xs={12} sm={12} md={props.showInterval ? 3 : 4}>
                   <Button 
                       color="primary"
                       className="section_3"
