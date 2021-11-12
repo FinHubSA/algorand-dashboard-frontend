@@ -47,7 +47,7 @@ export default function Transactions({ ...rest }) {
   const chartHeight = 510;
   const selectedAccountType = React.useRef();
   const selectedAccountTypeRange = React.useRef();
-  const [data, set_data] = React.useState([
+  var data = [
     {
       key: "",
       id: "T1",
@@ -162,8 +162,8 @@ export default function Transactions({ ...rest }) {
       sender_type: "Household",
       receiver_type: "Household",
       instrument_type: "Bank Notes",
-    },
-  ]);
+    }
+  ]
 
 
   var selectedFromDate = new Date();
@@ -193,7 +193,7 @@ export default function Transactions({ ...rest }) {
     //draw(data);
   });
 
-  function get_data() {
+  const get_data = () => {
     var url = "/api/node_transactions"
 
     var fromDate = formatDate(selectedFromDate);
@@ -205,7 +205,7 @@ export default function Transactions({ ...rest }) {
       url,
       parameters
     ).then((response) => {
-      console.log(response.data)
+      data = response.data;
       draw(response.data);
     })
     .catch(error => console.error('Error: $(error)'));
@@ -492,10 +492,15 @@ export default function Transactions({ ...rest }) {
         d3.drag().on("start", dragStart).on("drag", dragDragging).on("end", dragEnd)
       )
       .on("mouseover", (event, d) => {
-        node_tooltip(event, d);
+        var html = get_node_html(d);
+        d3.select("#network-info").html(html);
+        d3.select(this).style("fill-opacity", 0.5);
+        //node_tooltip(event, d);
       })
       .on("mouseout", () => {
-        tooltip.style("opacity", 0).style("left", "0px").style("top", "0px");
+        //tooltip.style("opacity", 0).style("left", "0px").style("top", "0px");
+        $("#network-info").empty();
+        d3.select(this).style("fill-opacity", 1);
       })
       .on("click", (event, d) => {
         tooltip.style("opacity", 0).style("left", "0px").style("top", "0px");
@@ -545,7 +550,31 @@ export default function Transactions({ ...rest }) {
     return groupColors[acc_type];
   }
 
-  function node_tooltip(event, d) {
+  function get_node_html(d){
+    var html = ""
+    if (d.id in groups) {
+      var info = groups[d.id]["info"];
+      var range = groups[d.id]["range"];
+      html = 
+        "<div>"+
+          "Group Info: " +info+" - " +
+          "Group Range: " +range +" - " +
+          "Payments: R" + fmt(d.payments) +" - " +
+          "Receipts: R " + fmt(d.receipts)
+        "</div>"
+    }else{
+      html = 
+        "<div>"+
+          "Account Name: " +d.id +" - " +
+          "Payments: R " + fmt(d.payments) + " - " +
+          "Receipts: R" + fmt(d.receipts)
+        "</div>"
+    }
+
+    return html;
+  }
+
+  function get_tooltip_html(d){
     var html = ""
     if (d.id in groups) {
       var info = groups[d.id]["info"];
@@ -566,6 +595,12 @@ export default function Transactions({ ...rest }) {
         "</div>"
     }
 
+    return html;
+  }
+
+  function node_tooltip(event, d) {
+    var html = get_tooltip_html(d);
+    
     tooltip
       .html(html)
       .style("left", event.pageX - 100 + "px")
@@ -750,9 +785,22 @@ export default function Transactions({ ...rest }) {
             </CardHeader>
             <CardBody>
               <GridContainer>
-                <GridItem xs={12} sm={6} md={2}>
+                <GridItem xs={12} sm={12} md={1}>
+                  <Button
+                    style={{margin: "5px", marginRight:"20px"}}
+                    color="primary"
+                    className="section_3"
+                    round
+                    onClick={() => {
+                      chart_data = _.cloneDeep(data);
+                      refresh_data();
+                    }}>
+                    Reset
+                  </Button>
+                </GridItem>
+                <GridItem xs={12} sm={12} md={2}>
                   <TextField
-                    style={{margin:"5px", width:"100%"}}
+                    style={{margin:"5px", marginLeft:"20px", width:"100%"}}
                     variant="outlined"
                     label="Account Type"
                     id='account_type_select'
@@ -766,9 +814,10 @@ export default function Transactions({ ...rest }) {
                     <MenuItem value="centralbank">Central Bank</MenuItem>
                   </TextField>
                 </GridItem>
-                <GridItem xs={12} sm={6} md={2}>
+                <GridItem 
+                  xs={12} sm={12} md={1}>
                   <Button
-                    style={{marginTop: "1rem"}}
+                    style={{margin: "5px"}}
                     color="primary"
                     className="section_3"
                     round
@@ -784,9 +833,9 @@ export default function Transactions({ ...rest }) {
                     Group
                   </Button>
                 </GridItem>
-                <GridItem xs={12} sm={6} md={2}>
+                <GridItem xs={12} sm={12} md={2}>
                   <TextField
-                    style={{margin:"5px", width:"100%"}}
+                    style={{margin:"5px", marginLeft:"15px", width:"100%"}}
                     variant="outlined"
                     label="Account Type"
                     id='account_type_range_select'
@@ -800,15 +849,15 @@ export default function Transactions({ ...rest }) {
                     <MenuItem value="centralbank">Central Bank</MenuItem>
                   </TextField>
                 </GridItem>
-                <GridItem xs={12} sm={6} md={2}>
+                <GridItem xs={12} sm={12} md={2}>
                   <TextField style={{margin:"5px"}} id="min-range" label="Min Balance" variant="outlined" />
                 </GridItem>
-                <GridItem xs={12} sm={6} md={2}>
+                <GridItem xs={12} sm={12} md={2}>
                   <TextField style={{margin:"5px"}} id="max-range" label="Max Balance" variant="outlined" />
                 </GridItem>
-                <GridItem xs={12} sm={6} md={2}>
+                <GridItem xs={12} sm={12} md={1}>
                   <Button
-                    style={{marginTop: "1rem"}}
+                    style={{margin: "5px"}}
                     color="primary"
                     className="section_3"
                     round
@@ -830,7 +879,12 @@ export default function Transactions({ ...rest }) {
                 <GridItem xs={12} sm={12} md={12}>
                   <div style={{ overflowX: "auto", overflowY: "hidden" }}>
                     <div className="container">
-                      <div className="vis-networkchart"></div>
+                      <div className="row">
+                        <div className="col-sm-12  text-center chart-info" id="network-info"></div>
+                      </div>
+                      <div className="row">
+                        <div className="vis-networkchart"></div>
+                      </div>
                     </div>
                   </div>
                 </GridItem>
