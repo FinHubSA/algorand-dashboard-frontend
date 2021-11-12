@@ -43,14 +43,19 @@ export default function Statistics() {
     ]);
 
     var interval = "day"
-    var selectedFromDate = new Date();
-    var selectedToDate = new Date();
+    const selectedFromDate = React.useRef(new Date());
+    const selectedToDate = React.useRef(new Date());
+
+    const startFromDate = new Date();
+    const startToDate = new Date();
+
     var chart_data = [];
     var svg;
     var fmt = d3.format("0,.0f");
 
     // Start with transactions a year agao
-    selectedFromDate.setFullYear(selectedFromDate.getFullYear() - 1);
+    startFromDate.setFullYear(startFromDate.getFullYear() - 1);
+    selectedFromDate.current.setFullYear(selectedFromDate.current.getFullYear() - 1);
 
    React.useEffect(() => {
      getData();
@@ -68,8 +73,8 @@ export default function Statistics() {
     //api calls
    const getTotalTransactions = () => {
      var url = "/api/total_transactions"
-     var fromDate = formatDate(selectedFromDate);
-     var toDate = formatDate(selectedToDate);
+     var fromDate = formatDate(selectedFromDate.current);
+     var toDate = formatDate(selectedToDate.current);
    
      var parameters = {"from":fromDate,"to":toDate};
 
@@ -85,8 +90,8 @@ export default function Statistics() {
    const getAverageTransactionAmount = () => {
       var url = "/api/average_transaction_amount"
 
-      var fromDate = formatDate(selectedFromDate);
-      var toDate = formatDate(selectedToDate);
+      var fromDate = formatDate(selectedFromDate.current);
+      var toDate = formatDate(selectedToDate.current);
     
       var parameters = {"from":fromDate,"to":toDate};
 
@@ -94,8 +99,6 @@ export default function Statistics() {
         url,
         parameters
       ).then((response) => {
-        console.log("average**")
-        console.log(response.data)
         var average = number_formatter(response.data.average_transaction_amount, 4)
         setAverageTransactionAmount(average);
       });
@@ -104,8 +107,8 @@ export default function Statistics() {
    const getAverageLoanAmount = () => {
       var url = "/api/average_loan_amount"
 
-      var fromDate = formatDate(selectedFromDate);
-      var toDate = formatDate(selectedToDate);
+      var fromDate = formatDate(selectedFromDate.current);
+      var toDate = formatDate(selectedToDate.current);
     
       var parameters = {"from":fromDate,"to":toDate};
 
@@ -113,8 +116,6 @@ export default function Statistics() {
         url,
         parameters
       ).then((response) => {
-        console.log("average**")
-        console.log(response.data)
         var average = number_formatter(response.data.average_loan_amount, 4)
         setAverageLoanAmount(average);
       });
@@ -130,8 +131,8 @@ export default function Statistics() {
 
   const getAccountsActivity = () => {
     var url = "/api/most_active_accounts"
-    var fromDate = formatDate(selectedFromDate);
-    var toDate = formatDate(selectedToDate);
+    var fromDate = formatDate(selectedFromDate.current);
+    var toDate = formatDate(selectedToDate.current);
     
     var parameters = {"from":fromDate,"to":toDate};
 
@@ -147,8 +148,8 @@ export default function Statistics() {
 
   const getAccountTypeVolume = () => {
     var url = "/api/account_type_transaction_volume"
-    var fromDate = formatDate(selectedFromDate);
-    var toDate = formatDate(selectedToDate);
+    var fromDate = formatDate(selectedFromDate.current);
+    var toDate = formatDate(selectedToDate.current);
     
     var parameters = {"from":fromDate,"to":toDate,"interval":interval};
     axios.post(
@@ -191,11 +192,11 @@ export default function Statistics() {
   }
     
   const handleFromDateChange = (date) => {
-      selectedFromDate = date;
+      selectedFromDate.current = date;
   };
   
   const handleToDateChange = (date) => {
-      selectedToDate = date;
+      selectedToDate.current = date;
   };
 
   const handleIntervalChange = (new_interval) => {
@@ -346,8 +347,8 @@ export default function Statistics() {
             handleIntervalChange={handleIntervalChange}
             handleGetRange={handleGetRange}
             showInterval={true}
-            selectedFromDate={selectedFromDate}
-            selectedToDate={selectedToDate}
+            selectedFromDate={startFromDate}
+            selectedToDate={startToDate}
         />
       </GridItem>
       <GridItem xs={12} sm={12} md={3}>

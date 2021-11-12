@@ -13,7 +13,6 @@ import CardBody from "components/Card/CardBody.js";
 import Button from "components/CustomButtons/Button.js";
 import moment from "moment";
 
-
 export default function DateRangePicker(props) {
   const [selectedFromDate, setSelectedFromDate] = React.useState(props.selectedFromDate);
   const [selectedToDate, setSelectedToDate] = React.useState(props.selectedToDate);
