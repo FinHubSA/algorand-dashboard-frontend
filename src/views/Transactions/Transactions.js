@@ -734,7 +734,7 @@ export default function Transactions({ ...rest }) {
   return (
     <div>
       <GridContainer>
-        <GridItem xs={12} sm={6} md={6}>
+        <GridItem xs={12} sm={6} md={12}>
           <DateRangePicker 
             handleFromDateChange={handleFromDateChange} 
             handleToDateChange={handleToDateChange}
@@ -767,7 +767,8 @@ export default function Transactions({ ...rest }) {
                   </TextField>
                 </GridItem>
                 <GridItem xs={12} sm={6} md={2}>
-                  <Button 
+                  <Button
+                    style={{marginTop: "1rem"}}
                     color="primary"
                     className="section_3"
                     round
@@ -806,7 +807,8 @@ export default function Transactions({ ...rest }) {
                   <TextField style={{margin:"5px"}} id="max-range" label="Max Balance" variant="outlined" />
                 </GridItem>
                 <GridItem xs={12} sm={6} md={2}>
-                  <Button 
+                  <Button
+                    style={{marginTop: "1rem"}}
                     color="primary"
                     className="section_3"
                     round

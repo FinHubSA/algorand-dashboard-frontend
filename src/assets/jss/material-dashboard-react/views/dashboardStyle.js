@@ -79,17 +79,20 @@ const dashboardStyle = {
     },
   },
   inputContainer: {
-      "display": "flex",
-      "flexDirection": "row",
-      "justifyContent": "center",
-      "alignItems": "center",
+    "display": "flex",
+    "flexDirection": "row",
+    "justifyContent": "center",
+    "alignItems": "center",
   },
  
   
-    summary : {
-      "fontSize": "18px"
-    }
-    
+  summary: {
+    "fontSize": "18px"
+  },
+
+  date_div: {
+    marginTop: "70px"
+  }
   
 };
 
