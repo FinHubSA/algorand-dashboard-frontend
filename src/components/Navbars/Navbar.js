@@ -29,20 +29,22 @@ export default function Header(props) {
     [" " + classes[color]]: color,
   });
   return (
-    <AppBar style={{display: display ? "" : "none"}} className={classes.appBar + appBarClasses}>
-      <Toolbar className={classes.container}>
-        <div className={classes.flex}>
+    <AppBar className={classes.appBar + appBarClasses}>
+      <Toolbar style={{float: "right"}}  className={classes.container}>
+        <div style={{display: display ? "" : "none"}} className={classes.flex}>
           {/* Here we create navbar brand, based on route name */}
           <Button color="transparent" href="#" className={classes.title}>
             {routeName}
           </Button>
         </div>
         <Hidden smDown implementation="css">
-          {props.rtlActive ? <RTLNavbarLinks /> : <AdminNavbarLinks />}
+          {props.rtlActive ? 
+            <RTLNavbarLinks display={display}/> :
+            <AdminNavbarLinks display={display}/>}
         </Hidden>
         <Hidden mdUp implementation="css">
           <IconButton
-            color="inherit"
+            style={{color:"white"}}
             aria-label="open drawer"
             onClick={props.handleDrawerToggle}
           >

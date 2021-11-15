@@ -213,8 +213,10 @@ const sidebarStyle = function (theme) {
       zIndex: "10",
       width: drawerWidthCollapsed,
       "&:hover": {
-        opacity: "1",
-        width: "200px",
+        [theme.breakpoints.up("md")]: {
+          opacity: "1",
+          width: "200px"
+        },
       },
     },
     whiteFont: {

@@ -23,8 +23,9 @@ import styles from "assets/jss/material-dashboard-react/components/headerLinksSt
 
 const useStyles = makeStyles(styles);
 
-export default function AdminNavbarLinks() {
+export default function AdminNavbarLinks(props) {
   const classes = useStyles();
+  const {display } = props;
   const [openNotification, setOpenNotification] = React.useState(null);
   const [openProfile, setOpenProfile] = React.useState(null);
   const handleClickNotification = (event) => {
@@ -48,7 +49,7 @@ export default function AdminNavbarLinks() {
     setOpenProfile(null);
   };
   return (
-    <div>
+    <div style={{display: display ? "" : "none"}}>
       <div className={classes.searchWrapper}>
         <CustomInput
           formControlProps={{

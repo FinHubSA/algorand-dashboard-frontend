@@ -101,14 +101,11 @@ export default function Admin({ ...rest }) {
         logo={logo}
         image={image}
         handleDrawerToggle={handleDrawerToggle}
-        open={false}
+        open={mobileOpen}
         color={color}
         collapsed={true}
         {...rest}
-        
       />
-      
-
       <div className={classes.mainPanelCollapsed} ref={mainPanel}>
         <Navbar
           routes={routes}

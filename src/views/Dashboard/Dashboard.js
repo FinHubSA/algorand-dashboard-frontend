@@ -45,7 +45,7 @@ export default function Dashboard() {
              <img class="banner-logo" src={algo_logo}  height={100}></img>
             </GridItem>            
           </GridContainer>        
-        </div>s
+        </div>
       </div>
        <Divider 
         style={{
