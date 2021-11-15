@@ -69,11 +69,14 @@ export default function Sidebar(props) {
                 />
               )}
               <ListItemText
-                style={{ visibility: collapsed ? "hidden" : "" }}
                 primary={props.rtlActive ? prop.rtlName : prop.name}
-                className={classNames(classes.itemText, whiteFontClasses, {
-                  [classes.itemTextRTL]: props.rtlActive,
-                })}
+                className={
+                  classNames(
+                    collapsed ? classes.itemTextCollapsed : classes.itemText, 
+                    whiteFontClasses, 
+                    {[classes.itemTextRTL]: props.rtlActive,}
+                  )
+                }
                 disableTypography={true}
               />
             </ListItem>

@@ -68,14 +68,14 @@ const dashboardRoutes = [
     component: FundsFlow,
     layout: "/admin",
   },
-  {
+  /*{
     path: "/accounts-activity",
     name: "Accounts Activity",
     rtlName: "قائمة الجدول",
     icon: BarChartIcon,
     component: AccountsActivity,
     layout: "/admin",
-  },
+  },*/
   {
     path: "/statistics",
     name: "Statistics",

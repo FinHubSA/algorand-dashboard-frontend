@@ -156,6 +156,7 @@ const sidebarStyle = function (theme) {
       position: "relative",
       display: "block",
       textDecoration: "none",
+      zIndex: "10",
       "&:hover,&:focus,&:visited,&": {
         color: whiteColor,
       },
@@ -197,6 +198,24 @@ const sidebarStyle = function (theme) {
     },
     itemTextRTL: {
       textAlign: "right",
+    },
+    itemTextCollapsed: {
+      ...defaultFont,
+      margin: "0",
+      lineHeight: "30px",
+      fontSize: "14px",
+      color: whiteColor,
+      opacity: "0",
+      backgroundColor: infoColor[1],
+      padding: "10px",
+      position:"fixed",
+      borderRadius:"5px",
+      zIndex: "10",
+      width: drawerWidthCollapsed,
+      "&:hover": {
+        opacity: "1",
+        width: "200px",
+      },
     },
     whiteFont: {
       color: whiteColor,
