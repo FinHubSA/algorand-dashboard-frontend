@@ -51,3 +51,8 @@
   background: #1abc9c;
   font-size: 30px;
 }
+
+.date-text {
+  text-decoration: underline;
+  font-weight: 500;
+}

@@ -211,7 +211,7 @@ const sidebarStyle = function (theme) {
       position:"fixed",
       borderRadius:"5px",
       zIndex: "10",
-      width: drawerWidthCollapsed,
+      width: "20px",
       "&:hover": {
         [theme.breakpoints.up("md")]: {
           opacity: "1",
