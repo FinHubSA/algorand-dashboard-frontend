@@ -23,9 +23,6 @@ import {nest as d3_nest} from 'd3-collection';
 import DateRangePicker from "components/DateRange/DateRangePicker.js"
 import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js";
 import {groupColors} from "assets/jss/material-dashboard-react.js";
-import {dailySalesChart} from "variables/charts.js";
-import ChartistGraph from "react-chartist";
-
 const useStyles = makeStyles(styles);
 
 export default function Statistics() {
@@ -141,6 +138,8 @@ export default function Statistics() {
       parameters
     ).then((response) => {
       var data = Object.values(response.data);
+      console.log('activity')
+      console.log(data)
       setAccountsActivity(data)
     })
     .catch(error => console.error('Error: $(error)'));
