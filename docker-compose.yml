@@ -1,0 +1,60 @@
+version: "3.2"
+services:
+  redis:
+    restart: always
+    image: redis:5
+    ports:
+      - "6379:6379"
+    networks:
+      - db-net
+
+  db:
+    restart: always
+    image: postgres
+    environment:
+      POSTGRES_USER: 'algorand_admin'
+      POSTGRES_PASSWORD: '123456'
+      POSTGRES_DB: 'algorand_dashboard'
+    networks:
+      - db-net
+
+  backend:
+    restart: always
+    container_name: backend
+    command : bash -c "python3 manage.py migrate &&
+                      python3 manage.py loaddata fixtures/model_fixtures.json &&
+                      python3 manage.py runserver 0.0.0.0:8000 &&
+                      celery -A algorand_dashboard worker -B"
+    build:
+      context: ./algorand-dashboard-backend/
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - redis
+    networks:
+      - db-net
+
+  frontend:
+    restart: always
+    command : npm start # the local frontend will request the heroku api
+    #command : npm run dev # the local frontend will request the local api
+    container_name: frontend
+    build:
+      context: ./algorand-dashboard-frontend/
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    stdin_open: true
+    depends_on:
+      - backend
+    networks:
+      - db-net
+
+networks:
+  db-net:
+    driver: bridge
+
+
+  
