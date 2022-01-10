@@ -32,6 +32,25 @@ Quick start options:
 - Clone the repo: `git clone https://github.com/FinHubSA/algorand-dashboard-frontend.git`
 - `npm install`
 
+### Docker
+
+- Copy the file docker-compose.yml and put into the root directory containing the frontend and the backend like this:
+.
+├── algorand-dashboard-backend
+├── algorand-dashboard-frontend
+└── docker-compose.yml
+
+- From this root directory run the following commands:
+- `sudo docker-compose build`
+- If you get an error about archive/tar: invalid tar header run:
+- `sudo chown -R 777 ./`
+- This is in the folder with the frontend and backend. NB make sure you are not calling this for the root folder. REMEMBER the dot in front of the forward slash.
+- `sudo docker-compose up -d`
+- The app will be on localhost:3000 and the api on localhost:8000
+- To stop the docker container
+- `sudo docker-compose down`
+
+
 ### Development
 
 - `npm run dev`
