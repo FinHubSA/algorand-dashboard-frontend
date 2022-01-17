@@ -166,8 +166,8 @@ export default function Transactions({ ...rest }) {
   ]
 
 
-  var selectedFromDate = new Date();
-  var selectedToDate = new Date();
+  var selectedFromDate = new Date(2019, 12, 1);
+  var selectedToDate = new Date(2021, 2, 2);
   // Data for drawing
   var chart_data = {}; 
   var simulation;
@@ -186,7 +186,7 @@ export default function Transactions({ ...rest }) {
   var fmt = d3.format("0,.0f");
 
   // Start with transactions a year agao
-  selectedFromDate.setFullYear(selectedFromDate.getFullYear() - 1);
+  // selectedFromDate.setFullYear(selectedFromDate.getFullYear() - 1);
 
   React.useEffect(() => {
     get_data();

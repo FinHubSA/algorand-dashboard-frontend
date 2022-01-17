@@ -40,8 +40,8 @@ export default function Statistics() {
     ]);
 
     var interval = "day"
-    const selectedFromDate = React.useRef(new Date());
-    const selectedToDate = React.useRef(new Date());
+    const selectedFromDate = React.useRef(new Date(2019, 12, 1));
+    const selectedToDate = React.useRef(new Date(2021, 2, 2));
 
     const startFromDate = new Date(2019, 12, 1);//new Date();
     const startToDate = new Date(2021, 2, 2);//new Date();

@@ -78,8 +78,8 @@ export default function FundsFlow({ ...rest }) {
   ]);
 
   var net_funds = {}
-  var selectedFromDate = new Date();
-  var selectedToDate = new Date();
+  var selectedFromDate = new Date(2019, 12, 1);
+  var selectedToDate = new Date(2021, 2, 2);
   var chart_data = []; 
   var bar_chart_data = []
   var sankey_svg;
@@ -90,7 +90,7 @@ export default function FundsFlow({ ...rest }) {
   var fmt = d3.format("0,.0f");
 
   // Start with transactions a year agao
-  selectedFromDate.setFullYear(selectedFromDate.getFullYear() - 1);
+  //selectedFromDate.setFullYear(selectedFromDate.getFullYear() - 1);
 
   React.useEffect(() => {
     //draw(data);
