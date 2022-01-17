@@ -44,7 +44,7 @@ Quick start options:
 - `sudo docker-compose build`
 - If you get an error about archive/tar: invalid tar header run:
 - `sudo chown -R 777 ./`
-- This is in the folder with the frontend and backend. NB make sure you are not calling this for the root folder. REMEMBER the dot in front of the forward slash.
+- This is in the folder with the frontend and backend. NB make sure you are not calling this for the computer root folder because it might mess up your computer :(. REMEMBER the dot in front of the forward slash if on a linux system. If on a mac get the full path to the algorand app.
 - `sudo docker-compose up -d`
 - The app will be on localhost:3000 and the api on localhost:8000
 - To stop the docker container
