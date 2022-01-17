@@ -43,16 +43,16 @@ export default function Statistics() {
     const selectedFromDate = React.useRef(new Date());
     const selectedToDate = React.useRef(new Date());
 
-    const startFromDate = new Date();
-    const startToDate = new Date();
+    const startFromDate = new Date(2019, 12, 1);//new Date();
+    const startToDate = new Date(2021, 2, 2);//new Date();
 
     var chart_data = [];
     var svg;
     var fmt = d3.format("0,.0f");
 
     // Start with transactions a year agao
-    startFromDate.setFullYear(startFromDate.getFullYear() - 1);
-    selectedFromDate.current.setFullYear(selectedFromDate.current.getFullYear() - 1);
+    //startFromDate.setFullYear(startFromDate.getFullYear() - 1);
+    //selectedFromDate.current.setFullYear(selectedFromDate.current.getFullYear() - 1);
 
    React.useEffect(() => {
      getData();
