@@ -40,6 +40,21 @@ Quick start options:
 ├── algorand-dashboard-frontend
 └── docker-compose.yml
 
+- If you want to query your local db:
+  - Copy the local_settings_copy.py into local_settings.py
+  - Make sure you use the parameters marked for docker usage
+- If you want to insert actual blockchain data:
+  - Clone the algorand testing sandbox from: https://github.com/algorand/sandbox.git
+  - Run the sandbox as instructed i.e. cd sandbox -> ./sandbox up
+  - In localsettings, set the ALGOD_FUNDING_ADDRESS and the ALGOD_FUNDING_MNEMONIC
+  - You get these by running: 
+  - ./sandbox goal account list
+  - This will first get you the default account address which will have some algos. Then run and put the above address below:
+  - ./sandbox goal account export --address HVSTYAQWRQNIBZVXXHHTRT2MVOG54P5UHRFLM5OYT7BDXFOMZAUCQ6UY5E
+- To run the tasks of creating transactions using celery you must first register a django admin:
+  - docker exec -it container_id python manage.py createsuperuser
+  - container id is by running the command: docker ps. Take the algorand backend container id.
+  - Then go to this url: http://localhost:8000/admin/ and login using those credentials
 - From this root directory run the following commands:
 - `sudo docker-compose build`
 - If you get an error about archive/tar: invalid tar header run:
