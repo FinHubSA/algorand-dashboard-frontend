@@ -14,6 +14,18 @@
       $ sudo apt install nodejs
       $ sudo apt install npm
 
+- #### Node installation on Mac
+
+  First insall homebrew
+
+      $ brew install node
+  
+  To install specific node version
+
+      $ brew unlink node
+      $ brew install node@6 // to install version 6
+      $ brew link node@6
+
 ### Backend
 
 - Clone the repo: `git clone https://github.com/FinHubSA/algorand-dashboard-backend.git`
@@ -33,6 +45,10 @@ Quick start options:
 - `npm install`
 
 ### Docker
+
+- #### Docker installation on Mac
+
+  - $ brew install --cask docker
 
 - Copy the file docker-compose.yml and put into the root directory containing the frontend and the backend like this:
 .
