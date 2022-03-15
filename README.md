@@ -61,6 +61,7 @@ Quick start options:
   - Make sure you use the parameters marked for docker usage
 - If you want to insert actual blockchain data:
   - Clone the algorand testing sandbox from: https://github.com/algorand/sandbox.git
+  - Set the sandbox to run in dev so its faster: .active_config
   - Run the sandbox as instructed i.e. cd sandbox -> ./sandbox up
   - In localsettings, set the ALGOD_FUNDING_ADDRESS and the ALGOD_FUNDING_MNEMONIC
   - You get these by running: 
@@ -71,6 +72,8 @@ Quick start options:
   - docker exec -it container_id python manage.py createsuperuser
   - container id is by running the command: docker ps. Take the algorand backend container id.
   - Then go to this url: http://localhost:8000/admin/ and login using those credentials
+  - Click on 'Add Periodic Task'
+  - Then add the task 
 - From this root directory run the following commands:
 - `sudo docker-compose build`
 - If you get an error about archive/tar: invalid tar header run:
