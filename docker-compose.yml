@@ -15,19 +15,24 @@ services:
       POSTGRES_USER: 'algorand_admin'
       POSTGRES_PASSWORD: '123456'
       POSTGRES_DB: 'algorand_dashboard'
+    ports:
+      - "5432:5432"
     networks:
       - db-net
 
   backend:
     restart: always
     container_name: backend
-    command : bash -c "python3 manage.py migrate &&
-                      python3 manage.py loaddata fixtures/model_fixtures.json &&
-                      python3 manage.py runserver 0.0.0.0:8000 &&
-                      celery -A algorand_dashboard worker -B"
+    command : bash -c "(python3 manage.py makemigrations) &&
+                      (python3 manage.py migrate) &&
+                      (python3 manage.py loaddata fixtures/model_fixtures.json) &&
+                      (python3 manage.py runserver 0.0.0.0:8000 &) &&
+                      (celery -A algorand_dashboard worker -B)"
     build:
       context: ./algorand-dashboard-backend/
       dockerfile: Dockerfile
+    volumes:
+      - ./algorand-dashboard-backend:/app/backend
     ports:
       - "8000:8000"
     depends_on:

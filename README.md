@@ -74,6 +74,10 @@ Quick start options:
   - Then go to this url: http://localhost:8000/admin/ and login using those credentials
   - Click on 'Add Periodic Task'
   - Then add the task 
+- There are 2 main tasks process_blockchain_data_task and process_json_data_task.
+  - process_blockchain_data_task takes the simulated data and puts it into the algorand sandbox first, then takes it from there and puts it into the dashboard DB. The indexer is used to take it from the blockchain to the app's DB.
+  - process_json_data_task takes the simulated data and puts it straight into the dashboard DB without going through the algorand sandbox blockchain.
+  - There are other subtasks which fall in these main tasks that can be found in the dashboard_analytics/tasks.py script.
 - From this root directory run the following commands:
 - `sudo docker-compose build`
 - If you get an error about archive/tar: invalid tar header run:
@@ -83,6 +87,24 @@ Quick start options:
 - The app will be on localhost:3000 and the api on localhost:8000
 - To stop the docker container
 - `sudo docker-compose down`
+- If you make changes to the backend code you don't need to rebuild, just run restart command to have the changes.
+- `sudo docker-compose restart`
+
+- #### Connect to postgres in docker
+
+- Run this command to view the container ids:
+```
+docker ps
+```
+- Run this command to get into the postgres docker container:
+```
+docker exec -it postgres_container_id bash
+psql algorand_dashboard algorand_admin
+```
+- Then run this command to show the tables:
+`\dt`
+- Then run this command to show table columns:
+`select * from dashboard_analytics_transaction where false;`
 
 
 ### Development
